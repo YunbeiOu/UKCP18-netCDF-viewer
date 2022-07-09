@@ -26,7 +26,7 @@
             L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=FHNZJguIf4wPZrb8W5557CNRNM0SoV3fwaGMJiJAoGMPINnk422jIoSi2k4Sde2B', {}).addTo(map);
             map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors");
             
-            var wmsLayer = L.tileLayer.wms('http://localhost:8080/geoserver/dissertation_test/wms',{layers:'geotiff_test_coordinate'}).addTo(map);
+            var wmsLayer = L.tileLayer.wms('http://localhost:8080/geoserver/dissertation_test/wms',{layers:'geotiff_test_coordinate',opacity: 0.5}).addTo(map);
        </script>
     </body>
 </html>
