@@ -37,11 +37,11 @@ require([
       container: "viewDiv",
       center: [-2.244644,53.483959],
       zoom: 5,
-      map: map
+      container: "viewDiv" 
     });
 
     // Add layer to map
-    let layer = new TileLayer({
+    const layer = new TileLayer({
         url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980/MapServer"
       });
 
