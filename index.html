@@ -33,11 +33,15 @@
     </body>
 </html> -->
 
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title>ArcGIS API for JavaScript Tutorials: Display a map</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+<title>ArcGIS API for JavaScript: Add a vector tile layer</title>
 
     <style>
       html,
@@ -50,12 +54,46 @@
       }
     </style>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css">
-    <script src="https://js.arcgis.com/4.24/"></script>
-    <script src="js/main.js"></script>
+<link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
+<script src="https://js.arcgis.com/4.23/"></script>
+<script>
 
-  </head>
-  <body>
-    <div id="viewDiv"></div>
-  </body>
+  require([
+    "esri/config",
+    "esri/Map",
+
+    "esri/layers/TileLayer",
+
+    "esri/views/MapView"
+
+  ], function (esriConfig,Map, TileLayer, MapView) {
+
+    var vtlLayer = new TileLayer({
+      url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980_WGS84_1/MapServer/"
+    });
+
+    esriConfig.apiKey = "AAPK1ecd870c1d4e4bcfac2352462e92a51e8eqBgiOJkh37AbrcXWy2rMnSSxumpX-fgm_CxI3gGYZ0j_iKq4EnGmIoK-P-Vs1O";
+
+    const map = new Map({
+
+      basemap: "arcgis-light-gray",
+
+      layers: [vtlLayer]
+
+    });
+
+    const view = new MapView({
+      container: "viewDiv",
+      center: [-2.244644,53.483959],
+      zoom: 4,
+      map: map
+    });
+  });
+
+</script>
+</head>
+
+<body>
+<div id="viewDiv"></div>
+</body>
 </html>
