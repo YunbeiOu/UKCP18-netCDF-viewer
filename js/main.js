@@ -19,7 +19,7 @@ require([
     "esri/config",
     "esri/Map",
 
-    "esri/layers/VectorTileLayer",
+    "esri/layers/TileLayer",
 
     "esri/views/MapView"
 
@@ -39,4 +39,10 @@ require([
       zoom: 5,
       map: map
     });
+
+    // Add layer to map
+    let layer = new TileLayer({
+        url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980/MapServer"
+      });
+
   });
