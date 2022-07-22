@@ -1,0 +1,93 @@
+# import libraries
+import arcpy
+from arcpy import env
+from arcpy.sa import *
+
+# input file
+root_dir = 'D:\\dissertation\\geotiff_files\\'
+out_root = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
+# env.workspace = 'D:\dissertation\geotiff_files\clt\clt_rcp85_land-cpm_uk_2.2km_01_mon_198012-198111.tif'
+
+# To allow overwriting the output change the overwrite option to true in ArcGIS Pro
+arcpy.env.overwriteOutput = True
+
+# Set variables
+env.workspace = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters'
+
+var_list = ['clt','flashrate','hurs','huss','pr','prsn',
+            'psl','rls','rss','sfcWind','snw','tas',
+            'tasmax','tasmin','uas','vas','wsgmax10m']
+
+time_list_1yr = list(range(1980,2000,1))+list(range(2020,2040,1))+list(range(2060,2080,1))
+
+time_list_20yr = ['1980','2020','2060']
+
+band_list_mon_1yr = ['Band_'+str(i) for i in list(range(1,13,1))]
+
+band_list_mon_20yr = ['Band_'+str(i) for i in list(range(1,241,1))]
+
+band_list_day = ['Band_'+str(i) for i in list(range(1,361,1))]
+
+seasons = ['winter','spring','summer','autumn']
+
+# # 1. Cell statistics function
+# def CELL_STATS(in_rasters, out_dir, stats_type, ignore_nodata='DATA', multiband='SINGLE_BAND'):
+#     outCellStats = CellStatistics(in_rasters, stats_type, ignore_nodata, multiband)
+#     outCellStats.save(out_dir)
+
+# # Call CELL_STATS function
+# # ['Band_1','Band_2','Band_3','Band_4']
+# for var_name in var_list:
+#     if var_name == 'wsgmax10m':
+#         for time_name in time_list_20yr:
+#             env.workspace = root_dir + 'wsgmax10m\\wsgmax10m_rcp85_land-cpm_uk_2.2km_01_mon_{}12-{}11.tif'.format(time_name,int(time_name)+20)
+#             for index, band_name in enumerate(band_list_mon_20yr):
+#                 if index%3 != 0:
+#                     continue
+#                 if band_name == band_list_mon_20yr[len(band_list_mon_20yr)-2]:
+#                     break
+#                 rasters = [band_name, band_list_mon_20yr[index+1], band_list_mon_20yr[index+2]]
+#                 year = str(int(time_name)+index//12)
+#                 season = seasons[index%4]
+#                 out_dir = out_root + '{}\\{}_{}.tif'.format(var_name,year,season)
+#                 CELL_STATS(rasters, out_dir, 'MEAN')
+
+#     elif var_name in ['flashrate','tasmax','tasmin']:
+#         for time_name in time_list_1yr:
+#             env.workspace = root_dir + '{}\\{}_rcp85_land-cpm_uk_2.2km_01_day_{}1201-{}1130.tif'.format(var_name, var_name, time_name,int(time_name)+1)
+#             # some hard code here
+#             for i in range(4): 
+#                 season = seasons[i]
+#                 rasters = ['Band_'+str(j) for j in list(range(90*i+1,90*i+91,1))]
+#                 out_dir = out_root + '{}\\{}_{}.tif'.format(var_name,time_name,season)
+#                 CELL_STATS(rasters, out_dir, 'MEAN')
+
+#     else:
+#         for time_name in time_list_1yr:
+#             env.workspace = root_dir + '{}\\{}_rcp85_land-cpm_uk_2.2km_01_mon_{}12-{}11.tif'.format(var_name, var_name, time_name,int(time_name)+1)
+#             for i in range(4): 
+#                 season = seasons[i]
+#                 rasters = ['Band_'+str(j) for j in list(range(3*i+1,3*i+4,1))]
+#                 out_dir = out_root + '{}\\{}_{}.tif'.format(var_name,time_name,season)
+#                 CELL_STATS(rasters, out_dir, 'MEAN')         
+
+
+# 2. Change symbology
+# 2.1 Add geotiff files as layer
+
+in_rasters_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
+def MAKE_RASTER_LAYER(in_raster,out_raster):
+    arcpy.management.MakeRasterLayer(in_raster,out_raster)
+
+def LOOP_FILES(in_root_dir, call_function):
+    for var_name in var_list:
+        for year_num in time_list_1yr:
+            for season_name in seasons:
+                target_file = in_root_dir + '{}\\{}_{}.tif'.format(var_name,year_num,season_name)
+                out_raster = '{}_{}_{}'.format(var_name,year_num,season_name)
+                call_function(target_file,out_raster)
+                arcpy.SaveToLayerFile_management(out_raster,'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\{}_{}_{}Lyr.lyr'.format(var_name,year_num,season_name),'ABSOLUTE')
+
+LOOP_FILES(in_rasters_dir, MAKE_RASTER_LAYER)
+
+# arcpy.ApplySymbologyFromLayer_management
