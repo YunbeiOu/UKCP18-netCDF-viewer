@@ -61,12 +61,11 @@
   require([
     "esri/config",
     "esri/Map",
-
     "esri/layers/TileLayer",
-
-    "esri/views/MapView"
-
-  ], function (esriConfig,Map, TileLayer, MapView) {
+    "esri/views/MapView",
+    "esri/renderers/RasterStretchRenderer",
+    "esri/tasks/support/AlgorithmicColorRamp"
+  ], function (esriConfig,Map, TileLayer, MapView, RasterStretchRenderer,AlgorithmicColorRamp) {
 
     var vtlLayer = new TileLayer({
       url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980_WGS84_1/MapServer/"
@@ -88,6 +87,17 @@
       zoom: 4,
       map: map
     });
+
+    let colorRamp = new AlgorithmicColorRamp({
+          algorithm: "lab-lch",
+          toColor: "red",
+          fromColor: "yellow"
+        });
+
+    var renderer = vtlLayer.renderer.clone();
+    renderer.colorRamp = colorRamp;
+    layer.renderer = renderer;
+
   });
 
 </script>

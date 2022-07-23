@@ -73,21 +73,55 @@ seasons = ['winter','spring','summer','autumn']
 
 
 # 2. Change symbology
-# 2.1 Add geotiff files as layer
+# 2.1 Input geotiff and save as .lyr file (layer file)
+# in_rasters_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
+# def MAKE_RASTER_LAYER(in_raster,out_raster):
+#     arcpy.management.MakeRasterLayer(in_raster,out_raster)
 
-in_rasters_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
-def MAKE_RASTER_LAYER(in_raster,out_raster):
-    arcpy.management.MakeRasterLayer(in_raster,out_raster)
+# def LOOP_FILES(in_root_dir, call_function):
+#     for var_name in var_list:
+#         for year_num in time_list_1yr:
+#             for season_name in seasons:
+#                 target_file = in_root_dir + '{}\\{}_{}.tif'.format(var_name,year_num,season_name)
+#                 out_raster = '{}_{}_{}'.format(var_name,year_num,season_name)
+#                 call_function(target_file,out_raster)
+#                 arcpy.SaveToLayerFile_management(out_raster,'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\{}_{}_{}Lyr.lyr'.format(var_name,year_num,season_name),'ABSOLUTE')
 
-def LOOP_FILES(in_root_dir, call_function):
-    for var_name in var_list:
-        for year_num in time_list_1yr:
-            for season_name in seasons:
-                target_file = in_root_dir + '{}\\{}_{}.tif'.format(var_name,year_num,season_name)
-                out_raster = '{}_{}_{}'.format(var_name,year_num,season_name)
-                call_function(target_file,out_raster)
-                arcpy.SaveToLayerFile_management(out_raster,'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\{}_{}_{}Lyr.lyr'.format(var_name,year_num,season_name),'ABSOLUTE')
+# LOOP_FILES(in_rasters_dir, MAKE_RASTER_LAYER)
 
-LOOP_FILES(in_rasters_dir, MAKE_RASTER_LAYER)
 
-# arcpy.ApplySymbologyFromLayer_management
+# 2.2 Extract by mask
+
+
+# # 2.3 Find maximum and minimum value for each variable
+# in_lyr_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\'
+
+# # Create a dict to store values
+# var_dict_max = dict.fromkeys(var_list)
+# var_dict_min = dict.fromkeys(var_list)
+
+# def find_extremes():
+#     for var_name in var_list:
+#         raster_file_first = in_lyr_dir + '{}_1980_winterLyr.lyrx'.format(var_name)
+#         max_val = arcpy.management.GetRasterProperties(raster_file_first,'MAXIMUM').getOutput(0) 
+#         min_val = arcpy.management.GetRasterProperties(raster_file_first,'MINIMUM').getOutput(0) 
+#         for year_num in time_list_1yr:
+#             for season_name in seasons:
+#                 raster_file = in_lyr_dir + '{}_{}_{}Lyr.lyrx'.format(var_name,year_num,season_name)
+#                 if arcpy.management.GetRasterProperties(raster_file,'MAXIMUM').getOutput(0) > max_val:
+#                     max_val = arcpy.management.GetRasterProperties(raster_file,'MAXIMUM').getOutput(0)
+#                 if arcpy.management.GetRasterProperties(raster_file,'MINIMUM').getOutput(0) < min_val:
+#                     min_val = arcpy.management.GetRasterProperties(raster_file,'MINIMUM').getOutput(0)
+#         var_dict_max[var_name] = max_val
+#         var_dict_min[var_name] = min_val
+
+# find_extremes()
+# print(var_dict_max,var_dict_min)
+
+
+# 2.4 Change symbology
+inputLayer = "clt_1980_springLyr.lyrx"
+symbologyLayer = "clt_1980_winter.lyrx"
+# in_layer = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\clt_1980_springLyr.lyrx'
+# in_symbology_layer = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\clt_1980_winter.lyrx'
+arcpy.ApplySymbologyFromLayer_management(inputLayer,symbologyLayer)
