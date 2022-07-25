@@ -2,6 +2,7 @@
 import arcpy
 from arcpy import env
 from arcpy.sa import *
+import os, sys
 
 # input file
 root_dir = 'D:\\dissertation\\geotiff_files\\'
@@ -119,9 +120,100 @@ seasons = ['winter','spring','summer','autumn']
 # print(var_dict_max,var_dict_min)
 
 
-# 2.4 Change symbology
-inputLayer = "clt_1980_springLyr.lyrx"
-symbologyLayer = "clt_1980_winter.lyrx"
-# in_layer = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\clt_1980_springLyr.lyrx'
-# in_symbology_layer = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\clt_1980_winter.lyrx'
-arcpy.ApplySymbologyFromLayer_management(inputLayer,symbologyLayer)
+# # 2.4 Change symbology
+# # 2.4.1 Use 'RasterStretchColorize' to set the stretch symbology for layer(s) -- each variable set once
+# p = arcpy.mp.ArcGISProject('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss.aprx')
+# m = p.listMaps('Map')[0]
+# l = m.listLayers('clt_1981_autumn')[0]
+# sym = l.symbology
+
+# if hasattr(sym, 'colorizer'):
+#     print('1')
+#     if sym.colorizer.type == 'RasterStretchColorizer':
+#         print('1')
+#         sym.colorizer.stretchType = "MinimumMaximum"
+#         # sym.colorizer.minPercent = 1.0
+#         # sym.colorizer.maxPercent = 1.0
+#         cr = p.listColorRamps('Blues (Continuous)')[0]
+#         sym.colorizer.colorRamp = cr
+#         sym.colorizer.invertColorRamp = False
+#         sym.colorizer.gamma = 2
+#         sym.colorizer.minLabel = "Min: " + sym.colorizer.minLabel
+#         sym.colorizer.maxLabel = "Max: " + sym.colorizer.maxLabel
+
+#         l.symbology = sym 
+
+# p.saveACopy('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test1.aprx')       
+
+# # 2.4.2 Apply the symbology of representive layer to other layers for each variable
+# # Run in ArcGIS Pro python console
+# inputLayer = "clt_1980_springLyr.lyrx"
+# symbologyLayer = "clt_1980_winter.lyrx"
+# arcpy.ApplySymbologyFromLayer_management(inputLayer,symbologyLayer)
+
+
+# 3. Share as web layer
+# Set output file names
+outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output"
+service = 'TestWebSharing_1'
+sddraft_filename = service + ".sddraft"
+sddraft_output_filename = os.path.join(outdir, sddraft_filename)
+
+# Reference map to publish
+prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test.aprx"
+aprx = arcpy.mp.ArcGISProject(prjPath)
+m = aprx.listMaps('Map')[0]
+lyrs = []
+lyrs.append(m.listLayers('clt_1982_autumn')[0])
+
+# Create TileSharingDraft and set service properties
+sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, lyrs)
+sharing_draft.summary = "UKCP_test_1"
+sharing_draft.tags = "clt_test_1"
+
+# Create Service Definition Draft file
+sharing_draft.exportToSDDraft(sddraft_output_filename)
+
+# Stage Service
+sd_filename = service + ".sd"
+sd_output_filename = os.path.join(outdir,sd_filename)
+arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
+
+# Share to portal
+print("Uploading Service Definition...")
+arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services")
+
+print("Successfully upload service.")
+
+# # 3.1 Set variables
+# # set path to the project
+# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test1.aprx"
+
+# # update the variables: feature service/SD name in arcgis.com, user/password of the owner account
+# sd_ts_name = 'MyPublicMap'
+# portal = 'http://www.arcgis.com'
+# user = 'ds\h59201yo'
+# password = 'Oyb9865761885!'
+
+# # set sharing options
+# shrOrg = True
+# shrEveryone = True
+# shrGroups = ""
+
+# # local paths
+# relPath = os.path.dirname(prjPath)
+# sddDraft = os.path.join(relPath,'WebUpdate.sd')
+# sd = os.path.join(relPath, 'WebUpdate.sd')
+
+# # 3.2 Create new SDDraft and stage to SD
+# print('Creating SD file')
+# arcpy.env.overwriteOutput = True
+# prj = arcpy.mp.ArcGISProject(prjPath)
+# mp = prj.listMaps('Map')[0]
+
+# arcpy.mp.CreateWebLayerSDDraft(mp,sddDraft,sd_ts_name,'MY_HOSTED_SERVICES',
+# 'LAYER_ACCESS','',True,True)
+# arcpy.StageService_server(sddDraft,sd)
+# arcpy.UploadServiceDefinition_server(in_sd_file=sd,in_server="My Hosted Services",)
+
+# print('Successfully Uploaded service.')
