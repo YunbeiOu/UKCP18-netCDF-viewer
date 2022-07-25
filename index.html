@@ -94,7 +94,11 @@
     
     const map = new Map({
 
-      basemap: "arcgis-light-gray",
+      basemap: {
+          portalItem: {
+            id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
+          }
+        },
 
       layers: [vtlLayer]
 
@@ -105,6 +109,7 @@
       center: [-2.244644,53.483959],
       zoom: 4,
       map: map,
+      spatialReference: 27700
     });
 
 
