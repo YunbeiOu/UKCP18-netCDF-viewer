@@ -83,7 +83,8 @@
     var vtlLayer = new TileLayer({
       // url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980_WGS84_1/MapServer/",
       url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/TestWebSharing_1/MapServer',
-      renderer: layerRenderer
+      renderer: layerRenderer,
+      spatialReference: {wkid: 4326}
     });
 
     esriConfig.apiKey = "AAPK1ecd870c1d4e4bcfac2352462e92a51e8eqBgiOJkh37AbrcXWy2rMnSSxumpX-fgm_CxI3gGYZ0j_iKq4EnGmIoK-P-Vs1O";
@@ -105,8 +106,6 @@
       center: [-2.244644,53.483959],
       zoom: 4,
       map: map,
-      spatialReference: {wkid: 27700}
-
     });
 
 
