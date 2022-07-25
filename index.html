@@ -106,14 +106,17 @@
     });
 
     const view = new MapView({
+      // container: "viewDiv",
+      // center: [-2.244644,53.483959],
+      // zoom: 4,
+      // map: map,
+      // spatialReference: 27700
+      spatialReference: 27700, 
       container: "viewDiv",
-      center: [-2.244644,53.483959],
-      zoom: 4,
       map: map,
-      spatialReference: 27700
+      center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
+      zoom: 7
     });
-
-
 
   });
 
