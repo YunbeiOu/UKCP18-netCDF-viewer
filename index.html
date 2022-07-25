@@ -64,8 +64,9 @@
     "esri/layers/TileLayer",
     "esri/views/MapView",
     "esri/renderers/RasterStretchRenderer",
-    "esri/tasks/support/AlgorithmicColorRamp"
-  ], function (esriConfig,Map, TileLayer, MapView, RasterStretchRenderer,AlgorithmicColorRamp) {
+    "esri/tasks/support/AlgorithmicColorRamp",
+    "esri/geometry/SpatialReference"
+  ], function (esriConfig, Map, TileLayer, MapView, RasterStretchRenderer, AlgorithmicColorRamp, SpatialReference) {
 
     let colorRamp = new AlgorithmicColorRamp({
           algorithm: "lab-lch",
@@ -103,7 +104,9 @@
       container: "viewDiv",
       center: [-2.244644,53.483959],
       zoom: 4,
-      map: map
+      map: map,
+      spatialReference: {wkid: 27700}
+
     });
 
 
