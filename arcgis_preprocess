@@ -4,13 +4,16 @@ from arcpy import env
 from arcpy.sa import *
 import os, sys
 
+
 # input file
 root_dir = 'D:\\dissertation\\geotiff_files\\'
 out_root = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
 # env.workspace = 'D:\dissertation\geotiff_files\clt\clt_rcp85_land-cpm_uk_2.2km_01_mon_198012-198111.tif'
 
+
 # To allow overwriting the output change the overwrite option to true in ArcGIS Pro
 arcpy.env.overwriteOutput = True
+
 
 # Set variables
 env.workspace = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters'
@@ -31,7 +34,8 @@ band_list_day = ['Band_'+str(i) for i in list(range(1,361,1))]
 
 seasons = ['winter','spring','summer','autumn']
 
-# # 1. Cell statistics function
+
+# # 1. Cell statistics function - seasonal map
 # def CELL_STATS(in_rasters, out_dir, stats_type, ignore_nodata='DATA', multiband='SINGLE_BAND'):
 #     outCellStats = CellStatistics(in_rasters, stats_type, ignore_nodata, multiband)
 #     outCellStats.save(out_dir)
@@ -73,13 +77,12 @@ seasons = ['winter','spring','summer','autumn']
 #                 CELL_STATS(rasters, out_dir, 'MEAN')         
 
 
-# 2. Change symbology
 # 2.1 Input geotiff and save as .lyr file (layer file)
 # in_rasters_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
 # def MAKE_RASTER_LAYER(in_raster,out_raster):
 #     arcpy.management.MakeRasterLayer(in_raster,out_raster)
 
-# def LOOP_FILES(in_root_dir, call_function):
+# def MAKE_LAYER_FILE(in_root_dir, call_function):
 #     for var_name in var_list:
 #         for year_num in time_list_1yr:
 #             for season_name in seasons:
@@ -88,10 +91,22 @@ seasons = ['winter','spring','summer','autumn']
 #                 call_function(target_file,out_raster)
 #                 arcpy.SaveToLayerFile_management(out_raster,'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\{}_{}_{}Lyr.lyr'.format(var_name,year_num,season_name),'ABSOLUTE')
 
-# LOOP_FILES(in_rasters_dir, MAKE_RASTER_LAYER)
 
+# 2. Extract by mask
+# MAKE_LAYER_FILE(in_rasters_dir, MAKE_RASTER_LAYER)
+in_lyr_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters\\'
+in_mask = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\GBR_adm\\GBR_adm0.shp'
+out_mask_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\mask_extract\\'
 
-# 2.2 Extract by mask
+def MASK_EXTRACT(in_root_dir, mask, out_dir=out_mask_dir):
+    for var_name in var_list:
+        for year_num in time_list_1yr:
+            for season_name in seasons:
+                target_file = in_root_dir + '{}_{}_{}Lyr.lyrx'.format(var_name,year_num,season_name)
+                outExtractByMask = ExtractByMask(target_file,mask)
+                outExtractByMask.save(out_dir + '{}_{}_{}Mask.tif'.format(var_name,year_num,season_name))
+
+MASK_EXTRACT(in_lyr_dir,in_mask)
 
 
 # # 2.3 Find maximum and minimum value for each variable
@@ -152,68 +167,35 @@ seasons = ['winter','spring','summer','autumn']
 # arcpy.ApplySymbologyFromLayer_management(inputLayer,symbologyLayer)
 
 
-# 3. Share as web layer
-# Set output file names
-outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output"
-service = 'TestWebSharing_1'
-sddraft_filename = service + ".sddraft"
-sddraft_output_filename = os.path.join(outdir, sddraft_filename)
+# # 3. Share as web layer
+# # Set output file names
+# outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output"
+# service = 'TestWebSharing_1'
+# sddraft_filename = service + ".sddraft"
+# sddraft_output_filename = os.path.join(outdir, sddraft_filename)
 
-# Reference map to publish
-prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test.aprx"
-aprx = arcpy.mp.ArcGISProject(prjPath)
-m = aprx.listMaps('Map')[0]
-lyrs = []
-lyrs.append(m.listLayers('clt_1982_autumn')[0])
+# # Reference map to publish
+# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test.aprx"
+# aprx = arcpy.mp.ArcGISProject(prjPath)
+# m = aprx.listMaps('Map')[0]
+# lyrs = []
+# lyrs.append(m.listLayers('clt_1982_autumn')[0])
 
-# Create TileSharingDraft and set service properties
-sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, lyrs)
-sharing_draft.summary = "UKCP_test_1"
-sharing_draft.tags = "clt_test_1"
+# # Create TileSharingDraft and set service properties
+# sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, lyrs)
+# sharing_draft.summary = "UKCP_test_1"
+# sharing_draft.tags = "clt_test_1"
 
-# Create Service Definition Draft file
-sharing_draft.exportToSDDraft(sddraft_output_filename)
+# # Create Service Definition Draft file
+# sharing_draft.exportToSDDraft(sddraft_output_filename)
 
-# Stage Service
-sd_filename = service + ".sd"
-sd_output_filename = os.path.join(outdir,sd_filename)
-arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
+# # Stage Service
+# sd_filename = service + ".sd"
+# sd_output_filename = os.path.join(outdir,sd_filename)
+# arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
 
-# Share to portal
-print("Uploading Service Definition...")
-arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services")
+# # Share to portal
+# print("Uploading Service Definition...")
+# arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services")
 
-print("Successfully upload service.")
-
-# # 3.1 Set variables
-# # set path to the project
-# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test1.aprx"
-
-# # update the variables: feature service/SD name in arcgis.com, user/password of the owner account
-# sd_ts_name = 'MyPublicMap'
-# portal = 'http://www.arcgis.com'
-# user = 'ds\h59201yo'
-# password = 'Oyb9865761885!'
-
-# # set sharing options
-# shrOrg = True
-# shrEveryone = True
-# shrGroups = ""
-
-# # local paths
-# relPath = os.path.dirname(prjPath)
-# sddDraft = os.path.join(relPath,'WebUpdate.sd')
-# sd = os.path.join(relPath, 'WebUpdate.sd')
-
-# # 3.2 Create new SDDraft and stage to SD
-# print('Creating SD file')
-# arcpy.env.overwriteOutput = True
-# prj = arcpy.mp.ArcGISProject(prjPath)
-# mp = prj.listMaps('Map')[0]
-
-# arcpy.mp.CreateWebLayerSDDraft(mp,sddDraft,sd_ts_name,'MY_HOSTED_SERVICES',
-# 'LAYER_ACCESS','',True,True)
-# arcpy.StageService_server(sddDraft,sd)
-# arcpy.UploadServiceDefinition_server(in_sd_file=sd,in_server="My Hosted Services",)
-
-# print('Successfully Uploaded service.')
+# print("Successfully upload service.")
