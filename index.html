@@ -82,7 +82,7 @@
 
     var vtlLayer = new TileLayer({
       // url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980_WGS84_1/MapServer/",
-      url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/tas_online/MapServer',
+      url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1982_autumn_default_diss/MapServer',
       renderer: layerRenderer,
       spatialReference: 27700
     });
@@ -114,7 +114,7 @@
       spatialReference: 27700, 
       container: "viewDiv",
       map: map,
-      center: [50000,50000],
+      center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
       zoom: 7
     });
 
