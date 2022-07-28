@@ -95,11 +95,13 @@
     
     const map = new Map({
 
-      basemap: {
-          portalItem: {
-            id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
-          }
-        },
+      basemap:"arcgis-light-gray",
+
+      // basemap: {
+      //     portalItem: {
+      //       id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
+      //     }
+      //   },
 
       layers: [vtlLayer]
 
@@ -111,10 +113,10 @@
       // zoom: 4,
       // map: map,
       // spatialReference: 27700
-      spatialReference: 27700, 
       container: "viewDiv",
       map: map,
-      center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
+      // center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
+      center: [-2.244644, 53.483959],
       zoom: 7
     });
 
