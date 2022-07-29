@@ -1,136 +1,3 @@
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Basic map
-        </title>
-        <meta name="viewport" content="'width=device-width,initial-scale=1.0,
-        maximum-scale=1.0, user-scalable=no">
-        <style>
-            body{
-                padding:0;
-                margin:0;
-            }
-            html, body, #map{
-                height:100%;
-                width:100%;
-            }
-        </style>
-        <link rel="stylesheet" href="leaflet/leaflet.css">
-        <script src="leaflet/leaflet.js"></script>
-    </head>
-    <body>
-        <div id="map"></div>
-        <script>
-            // Latitude, longitude
-            var map = L.map("map", {center: [53.483959, -2.244644], zoom:5});
-            L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token=FHNZJguIf4wPZrb8W5557CNRNM0SoV3fwaGMJiJAoGMPINnk422jIoSi2k4Sde2B', {}).addTo(map);
-            map.attributionControl.addAttribution("<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors");
-            
-            // var wmsLayer = L.tileLayer.wms('http://localhost:8080/geoserver/dissertation_test/wms',{layers:'geotiff_test_coordinate',opacity: 0.5}).addTo(map);
-            var wmsLayer = L.tileLayer.wms('http://localhost:8080/geoserver/dissertation_test/wms',{layers:'clt_rcp85_land-cpm_uk_2.2km_1985',opacity: 0.5}).addTo(map);
-       </script>
-    </body>
-</html> -->
-
-<!-- <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-<title>ArcGIS API for JavaScript: Add a vector tile layer</title>
-
-    <style>
-      html,
-      body,
-      #viewDiv {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
-    </style>
-
-<link rel="stylesheet" href="https://js.arcgis.com/4.23/esri/themes/light/main.css">
-<script src="https://js.arcgis.com/4.23/"></script>
-<script>
-
-  require([
-    "esri/config",
-    "esri/Map",
-    "esri/layers/TileLayer",
-    "esri/views/MapView",
-    "esri/tasks/support/AlgorithmicColorRamp",
-    "esri/geometry/SpatialReference",
-    "esri/geometry/Point"
-  ], function (esriConfig, Map, TileLayer, MapView, AlgorithmicColorRamp, SpatialReference, Point) {
-
-    // let colorRamp = new AlgorithmicColorRamp({
-    //       algorithm: "lab-lch",
-    //       toColor: "red",
-    //       fromColor: "yellow"
-    //     });
-    
-    // // create initial renderer
-    // let layerRenderer = new RasterStretchRenderer({
-    //     colorRamp: colorRamp,
-    //     stretchType: "min-max"
-    //     });
-
-    var vtlLayer = new TileLayer({
-      // url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980_WGS84_1/MapServer/",
-      url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980_winter/MapServer',
-      spatialReference: 27700
-    });
-
-    esriConfig.apiKey = "AAPK1ecd870c1d4e4bcfac2352462e92a51e8eqBgiOJkh37AbrcXWy2rMnSSxumpX-fgm_CxI3gGYZ0j_iKq4EnGmIoK-P-Vs1O";
-
-    // var renderer = vtlLayer.renderer.clone();
-    // renderer.colorRamp = colorRamp;
-    // vtlLayer.renderer = renderer;
-    
-    const map = new Map({
-
-      basemap:"arcgis-light-gray",
-
-      // basemap: {
-      //     portalItem: {
-      //       id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
-      //     }
-      //   },
-
-      layers: [vtlLayer]
-
-    });
-
-    const view = new MapView({
-      // container: "viewDiv",
-      // center: [-2.244644,53.483959],
-      // zoom: 4,
-      // map: map,
-      // spatialReference: 27700
-      container: "viewDiv",
-      map: map,
-      // center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
-      center: [-2.244644, 53.483959],
-      zoom: 4
-    });
-
-  });
-
-</script>
-</head>
-
-<body>
-<div id="viewDiv"></div>
-</body>
-</html> -->
-
-
-
 <!-- british national grid -->
 <!DOCTYPE html>
 <html>
@@ -159,13 +26,13 @@
       width: 70%;
     }
 
-    html, body, #tab {
+    /* html, body, #tab {
       float: left;
       border: 1px solid #ccc;
       background-color: #f1f1f1;
       width: 30%;
       height: 100%;
-    }
+    } */
   </style>
 
 </head>
@@ -173,6 +40,6 @@
 <body>
   <h1 id="main title"> UK Climate Change Decision Support System</h1>
   <div id="viewDiv"></div>
-  <div class="tab"></div>
+  <!-- <div class="tab"></div> -->
 </body>
 </html>‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍
