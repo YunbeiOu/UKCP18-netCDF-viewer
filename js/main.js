@@ -27,4 +27,5 @@ let view = new MapView({
   center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
   zoom: 6
 });
+
 });
