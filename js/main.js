@@ -25,6 +25,6 @@ let view = new MapView({
   container: "viewDiv",
   map: map,
   center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
-  zoom: 7
+  zoom: 6
 });
 });
