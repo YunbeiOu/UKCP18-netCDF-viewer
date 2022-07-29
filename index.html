@@ -33,7 +33,7 @@
     </body>
 </html> -->
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -127,4 +127,53 @@
 <body>
 <div id="viewDiv"></div>
 </body>
-</html>
+</html> -->
+
+
+
+<!-- british national grid -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>ArcGIS JavaScript with UK data - OS Basemap</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.15/"></script>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <script>  
+      require([
+        "esri/Map",
+        "esri/geometry/Point",
+        "esri/views/MapView"
+      ], function(Map, Point, MapView) {
+
+      let map = new Map({
+        basemap: {
+          portalItem: {
+            id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
+          }
+        }
+      });
+
+      let view = new MapView({
+        spatialReference: 27700, 
+        container: "viewDiv",
+        map: map,
+        center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
+        zoom: 7
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍
