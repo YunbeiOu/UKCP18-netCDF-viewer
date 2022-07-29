@@ -1,50 +1,30 @@
-// require(["esri/config","esri/Map", "esri/views/MapView"], function (esriConfig,Map, MapView) {
-
-//     esriConfig.apiKey = "AAPK1ecd870c1d4e4bcfac2352462e92a51e8eqBgiOJkh37AbrcXWy2rMnSSxumpX-fgm_CxI3gGYZ0j_iKq4EnGmIoK-P-Vs1O";
-
-//     const map = new Map({
-//       basemap: "arcgis-light-gray" // Basemap layer service
-//     });
-
-//     const view = new MapView({
-//       map: map,
-//       center: [-2.244644,53.483959], // Longitude, latitude
-//       zoom: 5, // Zoom level
-//       container: "viewDiv" // Div element
-//     });
-
-//   });
-
 require([
-    "esri/config",
-    "esri/Map",
+  "esri/Map",
+  "esri/layers/TileLayer",
+  "esri/geometry/Point",
+  "esri/views/MapView"
+], function(Map, TileLayer,Point, MapView) {
 
-    "esri/layers/TileLayer",
+var vtlLayer = new TileLayer({
+url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/tas_1980_spring/MapServer',
+spatialReference: 27700
+});
 
-    "esri/views/MapView"
+let map = new Map({
+  basemap: {
+    portalItem: {
+      id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
+    }
+  },
+  
+  layers: [vtlLayer]
+});
 
-  ], function (esriConfig,Map, TileLayer, MapView) {
-
-    // Add layer to map
-    var layer = new TileLayer({
-        url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1980/MapServer"
-    });
-
-    esriConfig.apiKey = "AAPK1ecd870c1d4e4bcfac2352462e92a51e8eqBgiOJkh37AbrcXWy2rMnSSxumpX-fgm_CxI3gGYZ0j_iKq4EnGmIoK-P-Vs1O";
-
-    const map = new Map({
-
-      basemap: "arcgis-light-gray",
-
-    });
-
-    const view = new MapView({
-      container: "viewDiv",
-      center: [-2.244644,53.483959],
-      zoom: 2,
-      map:map
-    });
-
-
-
-  });
+let view = new MapView({
+  spatialReference: 27700, 
+  container: "viewDiv",
+  map: map,
+  center: new Point({x: 500000, y: 500000, spatialReference: 27700}),
+  zoom: 7
+});
+});
