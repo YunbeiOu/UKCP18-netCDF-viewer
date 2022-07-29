@@ -8,8 +8,8 @@ import time
 
 
 # input file
-root_dir = 'D:\\dissertation\\geotiff_files\\'
-out_root = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
+# root_dir = 'D:\\dissertation\\geotiff_files\\'
+# out_root = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\'
 # env.workspace = 'D:\dissertation\geotiff_files\clt\clt_rcp85_land-cpm_uk_2.2km_01_mon_198012-198111.tif'
 
 
@@ -17,8 +17,8 @@ out_root = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\o
 arcpy.env.overwriteOutput = True
 
 
-# Set variables
-env.workspace = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\rasters'
+# # Set variables
+# env.workspace = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss'
 
 var_list = ['clt','flashrate','hurs','huss','pr','prsn',
             'psl','rls','rss','sfcWind','snw','tas',
@@ -218,46 +218,48 @@ seasons = ['winter','spring','summer','autumn']
 # p.saveACopy('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx')        
 
 
-# 5. Share as web layer
-# Sign in to portal
-# arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
-# arcpy.SignInToPortal("https://UoManchester.maps.arcgis.com", "yunbei.ou@student.manchester.ac.uk", "Oyb9865761885!")
-# print('signed in successfully')
+# # 5. Share as web layer
+# # Sign in to portal
+# # arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
+# # arcpy.SignInToPortal("https://UoManchester.maps.arcgis.com", "yunbei.ou@student.manchester.ac.uk", "Oyb9865761885!")
+# # print('signed in successfully')
 
-# Set output file names
-outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
+# # Set output file names
+# outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
 
-# Reference map to publish
-prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx"
-aprx = arcpy.mp.ArcGISProject(prjPath)
-m = aprx.listMaps('Map')[0]
+# # Reference map to publish
+# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx"
+# aprx = arcpy.mp.ArcGISProject(prjPath)
+# m = aprx.listMaps('Map')[0]
 
-for var_name in var_list:
-    for year_name in time_list_1yr:
-        for season_name in seasons:
-            lyr = m.listLayers('{}_{}_{}'.format(var_name,year_name,season_name))[0]
+# for var_name in var_list:
+#     if var_name == 'clt' or var_name == 'flashrate' or var_name == 'hurs' or var_name == 'huss':
+#         continue
+#     for year_name in time_list_1yr:
+#         for season_name in seasons:
+#             lyr = m.listLayers('{}_{}_{}'.format(var_name,year_name,season_name))[0]
 
-            # Create TileSharingDraft and set service properties
-            service = '{}_{}_{}'.format(var_name,year_name,season_name)
-            sddraft_filename = service + ".sddraft"
-            sddraft_output_filename = os.path.join(outdir, sddraft_filename)
-            sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, lyr)
-            sharing_draft.summary = "UKCP18_{}_{}_{}".format(var_name,year_name,season_name)
-            sharing_draft.tags = "UKCP18_{}_{}_{}".format(var_name,year_name,season_name)
+#             # Create TileSharingDraft and set service properties
+#             service = '{}_{}_{}'.format(var_name,year_name,season_name)
+#             sddraft_filename = service + ".sddraft"
+#             sddraft_output_filename = os.path.join(outdir, sddraft_filename)
+#             sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, lyr)
+#             sharing_draft.summary = "UKCP18_{}_{}_{}".format(var_name,year_name,season_name)
+#             sharing_draft.tags = "UKCP18_{}_{}_{}".format(var_name,year_name,season_name)
 
-            # Create Service Definition Draft file
-            sharing_draft.exportToSDDraft(sddraft_output_filename)
+#             # Create Service Definition Draft file
+#             sharing_draft.exportToSDDraft(sddraft_output_filename)
 
-            # Stage Service
-            sd_filename = service + ".sd"
-            sd_output_filename = os.path.join(outdir,sd_filename)
-            arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
+#             # Stage Service
+#             sd_filename = service + ".sd"
+#             sd_output_filename = os.path.join(outdir,sd_filename)
+#             arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
 
-            # Share to portal
-            print("Uploading Service Definition of {}_{}_{}...".format(var_name,year_name,season_name))
-            arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services",in_override = "OVERRIDE_DEFINITION", in_public = "PUBLIC", in_organization = "SHARE_ORGANIZATION")
+#             # Share to portal
+#             print("Uploading Service Definition of {}_{}_{}...".format(var_name,year_name,season_name))
+#             arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services", in_public = "PUBLIC", in_organization = "SHARE_ORGANIZATION")
 
-            print("Successfully upload service of {}_{}_{}.".format(var_name,year_name,season_name))
+#             print("Successfully upload service of {}_{}_{}.".format(var_name,year_name,season_name))
 
 
 # # 6. Change cache tiles (manage-map-server-cache-tiles)
@@ -300,48 +302,55 @@ for var_name in var_list:
 
 
 
-# # Previous version (worked)
-# # 5. Share as web layer
-# # Sign in to portal
-# # arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
+# Previous version (worked)
+# 5. Share as web layer
+# Sign in to portal
+# arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
 
-# # Set output file names
-# outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
+# Set output file names
+outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
 
-# # Reference map to publish
-# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test.aprx"
-# aprx = arcpy.mp.ArcGISProject(prjPath)
+# Reference map to publish
+prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_testshareweb\\MyProject_testshareweb.aprx"
+# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx"
+aprx = arcpy.mp.ArcGISProject(prjPath)
+m = aprx.listMaps('Map')[0]
+
+# out_layer_file = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyr'
+
+# arcpy.SaveToLayerFile_management(m.listLayers('clt_1982_autumn')[0], out_layer_file, "ABSOLUTE")
+# m.addDataFromPath('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyrx')
+# aprx.save()
 # m = aprx.listMaps('Map')[0]
+l = m.listLayers('wsgmax10m_2069_autumn')[0]
 
-# for var_name in var_list:
-#     for year_name in time_list_1yr:
-#         for season_name in seasons:
-#             lyr = m.listLayers('{}_{}_{}'.format(var_name,year_name,season_name))[0]
 
-# lyrs = []
-# lyrs.append(m.listLayers('clt_1982_autumn')[0])
+# Create TileSharingDraft and set service properties
+service = 'TestWebSharing_14'
+sddraft_filename = service + ".sddraft"
+sddraft_output_filename = os.path.join(outdir, sddraft_filename)
+sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, l)
+sharing_draft.summary = "UKCP_test_1"
+sharing_draft.tags = "clt_test_1"
+sharing_draft.overwriteExistingService = 'overwriteService'
 
-# # Create TileSharingDraft and set service properties
-# service = 'TestWebSharing_1'
-# sddraft_filename = service + ".sddraft"
-# sddraft_output_filename = os.path.join(outdir, sddraft_filename)
-# sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, lyrs)
-# sharing_draft.summary = "UKCP_test_1"
-# sharing_draft.tags = "clt_test_1"
+# Create Service Definition Draft file
+sharing_draft.exportToSDDraft(sddraft_output_filename)
 
-# # Create Service Definition Draft file
-# sharing_draft.exportToSDDraft(sddraft_output_filename)
-
-# # Stage Service
-# sd_filename = service + ".sd"
-# sd_output_filename = os.path.join(outdir,sd_filename)
+# Stage Service
+sd_filename = service + ".sd"
+sd_output_filename = os.path.join(outdir,sd_filename)
 # arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
+arcpy.StageService_server(sddraft_output_filename, sd_output_filename)
 
-# # Share to portal
-# print("Uploading Service Definition...")
-# arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services")
+# Share to portal
+print("Uploading Service Definition...")
+# arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services",in_override='OVERRIDE_DEFINITION',
+# in_public='PUBLIC',in_organization='SHARE_ORGANIZATION')
+output = arcpy.UploadServiceDefinition_server(sd_output_filename,"My Hosted Services",in_override='OVERRIDE_DEFINITION',
+in_public='PUBLIC',in_organization='SHARE_ORGANIZATION')
 
-# print("Successfully upload service.")
+print("Successfully upload service.")
 
 
 # # 6. Change cache tiles (manage-map-server-cache-tiles)
@@ -361,10 +370,12 @@ for var_name in var_list:
 # # Print results of the script to a report
 # report = open(file,'w')
 
-# input_service = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/Extract_19821_0_11/MapServer'
+# # input_service = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/Extract_19821_0_11/MapServer'
+# input_service = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_1982_autumn_private/MapServer'
 
 # try:
 #     result = arcpy.server.ManageMapServerCacheTiles(input_service , scales, updateMode)
+#     print(result)
 #     while result.status < 4:
 #         time.sleep(0.2)
 #     resultValue = result.getMessages()
