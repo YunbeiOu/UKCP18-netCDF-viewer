@@ -11,12 +11,45 @@
   <script src="js/main.js"></script>
 
   <style>
-    html, body, #viewDiv {
+    /* html, body, #viewDiv {
       float:right;
       padding: 0;
       margin: 0;
       height: 100%;
       width: 100%;
+    } */
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .appCont {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-flow: row nowrap;
+    }
+
+    #viewDiv {
+      width: calc(100% -200px);
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    #panel {
+      height: 100%;
+      width: 32px;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      background: green;
+      flex-flow: column;
     }
 
   </style>
@@ -25,7 +58,11 @@
 
 <body>
   <h1 id="main title"> UK Climate Change Decision Support System</h1>
-  <div id="viewDiv"></div>
+  <div class="appCont">
+    <div id="viewDiv"></div>
+    <div id="panel"></div>
+  </div>
+  
   <!-- <div class="tab"></div> -->
 </body>
 </html>‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍
