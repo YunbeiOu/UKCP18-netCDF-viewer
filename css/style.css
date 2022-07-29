@@ -1,7 +1,8 @@
-h1{background-color:#2B5F75; font-family:Arial, Helvetica, sans-serif; font-size:xx-large;height: 10%;}
+h1{background-color:#2B5F75; font-family:Arial, Helvetica, sans-serif; font: size 60px;;height: 10%;}
 
-#viewdiv {float: right; width: 100%; padding: 0;
+#viewdiv {padding: 0;
     margin: 0;
-    height: 80%;}
+    height: 100%;
+    width: 100%;}
 
 /* #leftpanel {float: left; width: 200px; margin-left: -200px; background-color: #CCCCCC;} */
