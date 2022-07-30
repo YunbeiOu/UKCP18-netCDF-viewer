@@ -7,17 +7,23 @@
   <title>ArcGIS JavaScript with UK data - OS Basemap</title>
   <link rel="stylesheet" href="https://js.arcgis.com/4.15/esri/css/main.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://js.arcgis.com/4.15/"></script>
   <script src="js/main.js"></script>
 </head>
 
 <body>
-  <div id='head'>
-      <h1>UK Climate Change Decision Support System</h1>
-  </div>
-  <div class='appCont'>
     <div id="viewDiv"></div>
-    <div id='panel'></div>
-  </div>
+  
+  <div id="dropdown1">
+        <label for="standard-select">Weather variable</label>
+        <div class="select">
+           <select class="js-example-basic-single" id="var">
+              <option value="tas" selected>Temperature</option>
+              <option value="pr">Precipitation</option>
+           </select>
+         <span class="focus"></span>
+        </div>
+      </div>
 </body>
 </html>‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍
