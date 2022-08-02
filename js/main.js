@@ -11,8 +11,9 @@ require([
   "esri/widgets/Legend",
   "esri/widgets/Swipe",
   "esri/widgets/TimeSlider",
-  "esri/widgets/Home"
-], function(Map, TileLayer,FeatureLayer,VectorTileLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home) {
+  "esri/widgets/Home",
+  "esri/widgets/Locate"
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate) {
 
    const labelClass = {
           // autocasts as new LabelClass()
@@ -179,6 +180,50 @@ require([
       zoom: 5
     });
 
+    view.ui.add("titleDiv", "top-right");
+
+       // Add the search widget to the top right corner of the view
+    // const searchWidget = new Search({
+    // view: view
+    // });
+
+    // view.ui.add(searchWidget, {
+    //   position: "top-right",
+    //   index:2,
+    // });
+
+    // const searchWidget = new Search({
+    //   view: view,
+    //   allPlaceholder: "District/Local authority",
+    //   includeDefaultSources: false,
+    //   sources: [
+    //     {
+    //       layer: fealayer2,
+    //       searchFields: ["NAME_2"],
+    //       displayField: "NAME_2",
+    //       exactMatch: false,
+    //       outFields: ["NAME_1","NAME_2", "TYPE_2"],
+    //       name: "Local authority (districts)",
+    //       placeholder: "example: Manchester"
+    //     },
+    //     {
+    //       layer: fealayer,
+    //       searchFields: ["Name_1"],
+    //       exactMatch: false,
+    //       outFields: ["Name_1"],
+    //       placeholder: "example: England",
+    //       name: "Senators",
+    //       zoomScale: 500000,
+    //     }
+    //   ]
+    // });
+
+    // // Add the search widget to the top left corner of the view
+    // view.ui.add(searchWidget, {
+    //   position: "top-right"
+    // });
+
+
  
     // // time slider widget initialization
     // const timeSlider = new TimeSlider({
@@ -188,15 +233,10 @@ require([
     //   loop: true
     // });
 
-    const searchWidget = new Search({
-    view: view
-    });
 
-    // Add the search widget to the top right corner of the view
-    view.ui.add(searchWidget, {
-      position: "top-right",
-      index:2,
-    });
+ 
+
+
 
     // Add legend
     const activeLayer = map.layers.getItemAt(0);
@@ -220,6 +260,15 @@ require([
     });
 
     view.ui.add(homeBtn, "top-left");
+
+    // Add locate button
+    const locateBtn = new Locate({
+      view: view
+    });
+
+    view.ui.add(locateBtn, {
+      position: "top-left"
+    });
 
 
     // Add button behaviors

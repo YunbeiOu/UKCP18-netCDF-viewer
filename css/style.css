@@ -5,7 +5,7 @@ html, body {
   height: 100%;
   font-size: 1em;
   font-family: sans-serif;
-  color:#FFF;
+  /* color:#FFF; */
 }
 
 #appCont {
@@ -24,6 +24,20 @@ html, body {
     padding: 0;
     margin: 0;
     z-index:1;
+  }
+
+  #titleDiv {
+    padding: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color:#323232;
+    color:rgb(187, 187, 187);
+  }
+  
+  #titleText {
+    font-size: 20pt;
+    font-weight: 60;
+    padding-bottom: 10px;
   }
 
 #timeSlider {
@@ -46,6 +60,7 @@ height: 100%;
 z-index: 1;
 font-size: 0.8em;/* 12 pixels */
 background-color: #2d2d2d;
+color:rgb(228, 228, 228);
 }
 
 p {
