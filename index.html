@@ -10,7 +10,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://js.arcgis.com/4.24/"></script>
   <script src="js/main.js"></script>
-
 </head>
 
 <body>
@@ -18,30 +17,74 @@
     <div id="viewDiv">
         <div id="timeSlider"></div>
     </div>
-	  
-
         
   	<div id="panel">
        <p>Select weather variable :</p>
 	  	 <div class="select" tabindex="1" id="var_select">
-         <input class="selectopt" name="var" type="radio" id="opt1" value="tas" checked>
-         <label for="opt1" class="option">Temperature</label>
-         <input class="selectopt" name="var" type="radio" id="opt2" value="pr">
-         <label for="opt2" class="option">Precipitation</label>
+         <input class="selectopt" name="var" type="radio" id="var_opt1" value="clt" checked>
+         <label for="var_opt1" class="option">Cloud cover</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt2" value="flashrate">
+         <label for="var_opt2" class="option">Lightning</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt3" value="hurs">
+         <label for="var_opt3" class="option">Relative humidity</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt4" value="huss">
+         <label for="var_opt4" class="option">Specific humidity</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt5" value="pr">
+         <label for="var_opt5" class="option">Precipitation</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt6" value="prsn">
+         <label for="var_opt6" class="option">Snowfall</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt7" value="psl">
+         <label for="var_opt7" class="option">Sea level pressure</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt8" value="rls">
+         <label for="var_opt8" class="option">Radiation (Net long wave)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt9" value="rss">
+         <label for="var_opt9" class="option">Radiation (Net short wave)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt10" value="sfcWind">
+         <label for="var_opt10" class="option">Wind speed</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt11" value="snw">
+         <label for="var_opt11" class="option">Lying snow</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt12" value="tas">
+         <label for="var_opt12" class="option">Temperature (Mean)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt13" value="tasmax">
+         <label for="var_opt13" class="option">Temerature (Maximum)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt14" value="tasmin">
+         <label for="var_opt14" class="option">Temperature (Minimum)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt15" value="uas">
+         <label for="var_opt15" class="option">Wind speed (Eastwards)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt16" value="vas">
+         <label for="var_opt16" class="option">Wind speed (Northwards)</label>
+
+         <input class="selectopt" name="var" type="radio" id="var_opt17" value="wsgmax10m">
+         <label for="var_opt17" class="option">Wind gusts</label>
        </div>
 
        <p>Select climate period :</p>
 	  	 <div class="select" tabindex="1" id="per_select">
-         <input class="selectopt" name="per" type="radio" id="per_opt1" value="1980-1999" checked>
+         <input class="selectopt" name="per" type="radio" id="per_opt1" value="history" checked>
          <label for="per_opt1" class="option">1980-1999</label>
-         <input class="selectopt" name="per" type="radio" id="per_opt2" value="2020-2039">
+         <input class="selectopt" name="per" type="radio" id="per_opt2" value="current">
          <label for="per_opt2" class="option">2020-2039</label>
-         <input class="selectopt" name="per" type="radio" id="per_opt3" value="2060-2079">
+         <input class="selectopt" name="per" type="radio" id="per_opt3" value="future">
          <label for="per_opt3" class="option">2060-2079</label>
        </div>
        
        <p>Select season :</p>
-	  	 <div class="select" tabindex="1" id="per_select">
+	  	 <div class="select" tabindex="1" id="sea_select">
          <input class="selectopt" name="sea" type="radio" id="sea_opt1" value="annual" checked>
          <label for="sea_opt1" class="option">Annual</label>
          <input class="selectopt" name="sea" type="radio" id="sea_opt2" value="winter">
