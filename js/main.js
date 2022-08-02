@@ -2,6 +2,7 @@ require([
   "esri/Map",
   "esri/layers/TileLayer",
   "esri/layers/FeatureLayer",
+  "esri/layers/VectorTileLayer",
   "esri/geometry/Point",
   "esri/views/MapView",
    "esri/Basemap",
@@ -10,7 +11,7 @@ require([
   "esri/widgets/Legend",
   "esri/widgets/Swipe",
   "esri/widgets/TimeSlider"
-], function(Map, TileLayer,FeatureLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider) {
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider) {
 
    const labelClass = {
           // autocasts as new LabelClass()
@@ -78,8 +79,13 @@ spatialReference: 27700
 // Create featurelayer from feature service
 const fealayer = new FeatureLayer({
   // URL to the service
-  url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm1/FeatureServer",
-  labelingInfo: [labelClass],
+  url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm1/FeatureServer"
+  // labelingInfo: [labelClass],
+});
+
+let vtlLayer_GB = new VectorTileLayer({
+  // URL to the vector tile service
+  url: "https://uomanchester.maps.arcgis.com/sharing/rest/content/items/796bcd7e487b416ba3420d1ffc8649d7/resources/styles/root.json"
 });
   
 let map = new Map({
@@ -90,7 +96,7 @@ let map = new Map({
     }
   },
   
-  layers: [vtlLayer]
+  layers: [vtlLayer,fealayer,vtlLayer_GB]
 });
 
 let view = new MapView({
