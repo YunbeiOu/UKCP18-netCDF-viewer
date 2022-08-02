@@ -36,7 +36,7 @@ band_list_day = ['Band_'+str(i) for i in list(range(1,361,1))]
 
 seasons = ['winter','spring','summer','autumn']
 
-
+# Create seasonal files
 # # 1. Cell statistics function - seasonal map
 # def CELL_STATS(in_rasters, out_dir, stats_type, ignore_nodata='DATA', multiband='SINGLE_BAND'):
 #     outCellStats = CellStatistics(in_rasters, stats_type, ignore_nodata, multiband)
@@ -218,6 +218,137 @@ seasons = ['winter','spring','summer','autumn']
 # p.saveACopy('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx')        
 
 
+# # Create periodical files (work)
+# # 5. Use Cell Statistics to create periodic mean for each variable
+# # Save mask_symbology layers of arcgis project to file
+
+
+# # Check out the ArcGIS Spatial Analyst extension license
+# arcpy.CheckOutExtension("Spatial")
+
+# # Set the analysis environments
+# arcpy.env.workspace = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\mask_layer_file\\"
+
+# out_period_dir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_output\\"
+
+# periods = ['history','current','future']
+# ann_seasons = ['annual','winter','spring','summer','autumn']
+# # for var_name in var_list:
+# #     for season_name in seasons:
+# #         for i in range(3):
+# #             period_var_list = ['{}_{}_{}.lyrx'.format(var_name,str(i),season_name) for i in list(range(1980+40*i,2000+40*i,1))]
+# #             outCellStatistics = CellStatistics(period_var_list, "MEAN", "NODATA", "SINGLE_BAND")
+# #             outCellStatistics.save(out_period_dir + "{}_{}_{}.tif".format(var_name,periods[i],season_name))
+    
+# # arcpy.env.workspace = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_output\\" 
+
+# # for var_name in var_list:
+# #     for i in range(3):
+# #         period_var_list = ['{}_{}_{}.tif'.format(var_name,periods[i],j) for j in seasons]
+# #         outCellStatistics = CellStatistics(period_var_list, "MEAN", "NODATA", "SINGLE_BAND")
+# #         outCellStatistics.save(out_period_dir + "{}_{}_{}.tif".format(var_name,periods[i],'annual'))
+
+
+# # 4.Change symbology
+# # 4.1 Input geotiff and save as .lyr file (layer file)
+# in_tiff_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_output\\'
+# def MAKE_RASTER_LAYER(in_raster,out_raster):
+#     arcpy.management.MakeRasterLayer(in_raster,out_raster)
+
+# def MAKE_LAYER_FILE(in_root_dir):
+#     for var_name in var_list:
+#         for period_name in periods:
+#             for season_name in ann_seasons:
+#                 target_file = in_root_dir + '{}_{}_{}.tif'.format(var_name,period_name,season_name)
+#                 out_raster = '{}_{}_{}'.format(var_name,period_name,season_name)
+#                 MAKE_RASTER_LAYER(target_file,out_raster)
+#                 arcpy.SaveToLayerFile_management(out_raster,'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_layer_file\\{}_{}_{}.lyr'.format(var_name,period_name,season_name),'ABSOLUTE')
+
+# MAKE_LAYER_FILE(in_tiff_dir)
+
+# # 4.2 Add all layers to map
+# p = arcpy.mp.ArcGISProject('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_test.aprx')
+# m = p.listMaps('Map')[0]
+# in_mLyr_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_layer_file\\'
+
+# for var_name in var_list:
+#     for period_name in periods:
+#         for season_name in ann_seasons:
+#             data_path = in_mLyr_dir + '{}_{}_{}.lyrx'.format(var_name,period_name,season_name)
+#             m.addDataFromPath(data_path)
+
+# print('added all layers')
+
+# # 4.3 Use 'RasterStretchColorize' to set the stretch symbology for all layers (set min and max)
+# # create symbology dicts
+# symb_dict = dict.fromkeys(var_list)
+# symb_dict['clt'] = 'Shadow to Sunshine'
+# symb_dict['flashrate'] = 'Cyan to Purple'
+# symb_dict['hurs'] = 'Green-Blue (Continuous)'
+# symb_dict['huss'] = 'Green-Blue (Continuous)'
+# symb_dict['pr'] = 'Precipitation'
+# symb_dict['prsn'] = 'Brown-Green (Continuous)'
+# symb_dict['psl'] = 'Red-Blue (Continuous)'
+# symb_dict['rls'] = 'Spectral (Continuous)'
+# symb_dict['rss'] = 'Spectrum-Full Bright'
+# symb_dict['sfcWind'] = 'Yellow-Green-Blue (Continuous)'
+# symb_dict['snw'] = 'Surface'
+# symb_dict['tas'] = 'Prediction'
+# symb_dict['tasmax'] = 'Prediction'
+# symb_dict['tasmin'] = 'Prediction'
+# symb_dict['uas'] = 'Yellow-Green-Blue (Continuous)'
+# symb_dict['vas'] = 'Yellow-Green-Blue (Continuous)'
+# symb_dict['wsgmax10m'] = 'Yellow-Green-Blue (Continuous)'
+
+# invert_dict = {'clt':True, 'flashrate':False, 'hurs':False, 'huss':False, 'pr':False,
+# 'prsn':False, 'psl':True, 'rls':False, 'rss':False, 'sfcWind':False, 'snw':False,
+# 'tas':False, 'tasmax':False, 'tasmin':False, 'uas':False, 'vas':False, 'wsgmax10m':False}
+
+# min_dict = {'clt':30, 'flashrate':0, 'hurs':50, 'huss':0, 'pr':0,
+# 'prsn':0, 'psl':1000, 'rls':-90, 'rss':10, 'sfcWind':3, 'snw':0,
+# 'tas':-0.5, 'tasmax':0, 'tasmin':-3, 'uas':-0.5, 'vas':-0.5, 'wsgmax10m':3}
+
+# max_dict = {'clt':100, 'flashrate':1, 'hurs':100, 'huss':9, 'pr':10,
+# 'prsn':9, 'psl':1025, 'rls':-10, 'rss':90, 'sfcWind':9, 'snw':500,
+# 'tas':30, 'tasmax':37, 'tasmin':10, 'uas':8, 'vas':8, 'wsgmax10m':20}
+
+# # change symbology for each variable
+# for var_name in var_list:
+#     for period_name in periods:
+#         for season_name in ann_seasons:
+#             layer_name = '{}_{}_{}'.format(var_name,period_name,season_name)
+#             l = m.listLayers(layer_name)[0]
+#             sym = l.symbology
+
+#             if hasattr(sym, 'colorizer'):
+#                 if sym.colorizer.type == 'RasterStretchColorizer':
+#                     sym.colorizer.stretchType = "MinimumMaximum"
+#                     cr = p.listColorRamps(symb_dict[var_name])[0]
+#                     sym.colorizer.colorRamp = cr
+#                     sym.colorizer.invertColorRamp = invert_dict[var_name]
+#                     sym.colorizer.gamma = 2
+#                     sym.colorizer.minLabel = '<' + str(min_dict[var_name]) 
+#                     sym.colorizer.maxLabel = '>' + str(max_dict[var_name])
+
+#                     l.symbology = sym 
+
+#                     #use CIM to set custom statistics
+#                     cim_lyr = l.getDefinition('V2')
+#                     cim_lyr.colorizer.statsType = 'GlobalStats'
+#                     cim_lyr.colorizer.useCustomStretchMinMax = True
+#                     cim_lyr.colorizer.stretchStats.max = int(max_dict[var_name])
+#                     cim_lyr.colorizer.stretchStats.min = int(min_dict[var_name])
+#                     l.setDefinition(cim_lyr)
+    
+#     print(var_name)
+
+# # save to a new project
+# p.saveACopy('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_Period.aprx')        
+
+
+
+
+
 # # 5. Share as web layer
 # # Sign in to portal
 # # arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
@@ -311,7 +442,7 @@ seasons = ['winter','spring','summer','autumn']
 outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
 
 # Reference map to publish
-prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_testshareweb\\MyProject_testshareweb.aprx"
+prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_Period.aprx"
 # prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx"
 aprx = arcpy.mp.ArcGISProject(prjPath)
 m = aprx.listMaps('Map')[0]
@@ -322,11 +453,11 @@ m = aprx.listMaps('Map')[0]
 # m.addDataFromPath('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyrx')
 # aprx.save()
 # m = aprx.listMaps('Map')[0]
-l = m.listLayers('wsgmax10m_2069_autumn')[0]
+l = m.listLayers('clt_history_spring')[0]
 
 
 # Create TileSharingDraft and set service properties
-service = 'TestWebSharing_14'
+service = 'TestWebSharing_15'
 sddraft_filename = service + ".sddraft"
 sddraft_output_filename = os.path.join(outdir, sddraft_filename)
 sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, l)
