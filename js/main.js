@@ -176,7 +176,7 @@ require([
       container: "viewDiv",
       map: map,
       center: new Point({x: 350000, y: 500000, spatialReference: 27700}),
-      zoom: 4
+      zoom: 5
     });
 
  
