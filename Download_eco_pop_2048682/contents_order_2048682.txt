@@ -1,0 +1,61 @@
+********************************************************************
+
+EDINA DIGIMAP:
+
+DIGITAL DATA SUPPLY
+
+********************************************************************
+
+
+This data is distributed under licence by:
+
+    EDINA
+    University of Edinburgh
+    https://edina.ac.uk
+
+    Tel:    0131 650 3302
+    Fax:    0131 650 3308
+    Email:  digimap@ed.ac.uk
+		
+
+
+---------------------------------------------------------
+
+CONTENTS
+
+You will have received the data files listed below, each product and area has
+its own folder. Note that each data folder contains a conditions.txt file
+which states the conditions for use of the data within. These conditions can
+vary between different data products.
+
+
+
+-------------------------------------------------------------------------------
+Folder:           ons-economic_4624643
+Extent:           0.0, 0.0 - 700000.0, 1216400.0549316406
+Date Ordered:     3 August 2022 at 12:31:24
+Product:          Economic activity
+Version:          2011 Census
+Format:           CSV
+Theme:            N/A
+Area:             851480.0384521484 square kilometres
+Chunks:
+ 
+Filename:         ons-economic_4624643/ons-economic_4624643.csv
+Extent:           0.0, 0.0 - 700000.0, 1216400.0549316406
+Last Amended:     27 March 2011
+    -------------------------------------------------------------------------------
+Folder:           ons-pop-density_4624644
+Extent:           0.0, 0.0 - 700000.0, 1216400.0549316406
+Date Ordered:     3 August 2022 at 12:31:24
+Product:          Population density
+Version:          2011 Census
+Format:           CSV
+Theme:            N/A
+Area:             851480.0384521484 square kilometres
+Chunks:
+ 
+Filename:         ons-pop-density_4624644/ons-pop-density_4624644.csv
+Extent:           0.0, 0.0 - 700000.0, 1216400.0549316406
+Last Amended:     27 March 2011
+     

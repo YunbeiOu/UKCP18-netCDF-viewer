@@ -3,6 +3,7 @@ require([
   "esri/layers/TileLayer",
   "esri/layers/FeatureLayer",
   "esri/layers/VectorTileLayer",
+  "esri/layers/WMSLayer",
   "esri/geometry/Point",
   "esri/views/MapView",
    "esri/Basemap",
@@ -13,7 +14,7 @@ require([
   "esri/widgets/TimeSlider",
   "esri/widgets/Home",
   "esri/widgets/Locate"
-], function(Map, TileLayer,FeatureLayer,VectorTileLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate) {
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate) {
 
    const labelClass = {
           // autocasts as new LabelClass()
@@ -161,6 +162,7 @@ require([
     });
 
 
+
   
     let map = new Map({
       basemap: {
@@ -177,7 +179,7 @@ require([
       container: "viewDiv",
       map: map,
       center: new Point({x: 350000, y: 500000, spatialReference: 27700}),
-      zoom: 5
+      zoom: 4
     });
 
     view.ui.add("titleDiv", "top-right");
