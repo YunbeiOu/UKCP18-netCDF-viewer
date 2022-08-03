@@ -162,7 +162,6 @@ require([
     });
 
 
-
   
     let map = new Map({
       basemap: {
