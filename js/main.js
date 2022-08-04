@@ -13,8 +13,9 @@ require([
   "esri/widgets/Swipe",
   "esri/widgets/TimeSlider",
   "esri/widgets/Home",
-  "esri/widgets/Locate"
-], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate) {
+  "esri/widgets/Locate",
+  "esri/widgets/LayerList"
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate,LayerList) {
 
    const labelClass = {
           // autocasts as new LabelClass()
@@ -109,18 +110,33 @@ require([
       spatialReference: 27700
       });
 
+      // view.ui.empty("manual");
       map.removeAll();
+      
 
       map.layers.add(vtlLayer);
       map.layers.add(fealayer);
+      map.layers.add(fealayer2);
+      map.layers.add(fealayer3);
       map.layers.add(vtlLayer_GB);
 
-      // view.ui.remove(legend);
+      // // Add swipe widget
+      // // create a new Swipe widget
+      // const swipe = new Swipe({
+      //   leadingLayers: [fealayer2],
+      //   trailingLayers: [vtlLayer],
+      //   position: 35, // set position of widget to 35%
+      //   view: view
+      // });
+      // // add the widget to the view
+      // view.ui.add(swipe,"manual");
 
+
+
+      // view.ui.remove(legend);
       view.ui.empty("bottom-right");
 
       
-
       view.ui.add(new Legend({
         view: view,
         layerInfos: [
@@ -153,7 +169,12 @@ require([
 
     let fealayer2 = new FeatureLayer({
       // URL to the vector tile service
-      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2/FeatureServer"
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/socio_eco_uk/FeatureServer"
+    });
+
+    let fealayer3 = new FeatureLayer({
+      // URL to the vector tile service
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/all_residents/FeatureServer"
     });
 
     let vtlLayer_GB = new VectorTileLayer({
@@ -170,7 +191,7 @@ require([
           id: "a118075240bc4e4f8062265ecdad0e7e" // Open Grey
         }
       },
-      layers: [vtlLayer,fealayer,vtlLayer_GB]
+      layers: [vtlLayer,fealayer,fealayer2,fealayer3,vtlLayer_GB]
     });
 
     let view = new MapView({
@@ -255,6 +276,19 @@ require([
     // Add widget to the bottom right corner of the view
     view.ui.add(legend, "bottom-right");
 
+
+    // Add swipe widget
+    // create a new Swipe widget
+    const swipe = new Swipe({
+      leadingLayers: [fealayer2,fealayer3],
+      trailingLayers: [vtlLayer],
+      position: 35, // set position of widget to 35%
+      view: view
+    });
+    // add the widget to the view
+    view.ui.add(swipe,"manual");
+
+
     // Add home button
     const homeBtn = new Home({
       view: view
@@ -270,6 +304,16 @@ require([
     view.ui.add(locateBtn, {
       position: "top-left"
     });
+
+
+    // // Add layerlist widget
+    // let layerList = new LayerList({
+    //   view: view
+    // });
+    // // Adds widget below other elements in the top left corner of the view
+    // view.ui.add(layerList, {
+    //   position: "top-left"
+    // });
 
 
     // Add button behaviors
