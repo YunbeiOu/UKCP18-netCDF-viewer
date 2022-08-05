@@ -1,110 +1,60 @@
-<!-- british national grid -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>ArcGIS JavaScript with UK data - OS Basemap</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css">
-  <link rel="stylesheet" href="css/style2.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://js.arcgis.com/4.24/"></script>
-  <script src="js/main.js"></script>
-</head>
-
-<body>
-  <div id='appCont'>
-    <div id="viewDiv">
-        <div id="timeSlider"></div>
-    </div>
-
-    <div id="titleDiv" class="esri-widget">
-      <div id="titleText">UK Climate Change</div>
-      <div>Planning Support System</div>
-    </div>
+    <head>
+        <title>
+            Basic map
+        </title>
+        <meta name="viewport" content="'width=device-width,initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no">
+        <style>
+            body{
+                padding:0;
+                margin:0;
+            }
+            html, body, #map{
+                height:100%;
+                width:100%;
+            }
+        </style>
         
-  	<div id="panel">
-       <p>Select weather variable :</p>
-	  	 <div class="select_var" tabindex="1" id="var_select">
-         <input class="selectopt_var" name="var" type="radio" id="var_opt1" value="clt" checked>
-         <label for="var_opt1" class="option_var">Cloud cover</label>
+        <link rel="stylesheet" href="leaflet/leaflet.css">
+        <script src="leaflet/leaflet.js"></script>
+        <script src="lib/proj4.js"></script>
+        <script>
+          // Define a Proj4Leaflet crs instance configured for British National Grid
+          // (EPSG:27700) and the resolutions of our base map
+          var crs = new L.Proj.CRS(
+              'EPSG:27700',
+              '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs',
+              {
+                  resolutions: [1600,800,400,200,100,50,25,10,5,2.5,1,0.5,0.25,0.125,0.0625]
+              }
+          );
 
-         <input class="selectopt_var" name="var" type="radio" id="var_opt2" value="flashrate">
-         <label for="var_opt2" class="option_var">Lightning</label>
+          // Define a standard Leaflet map specifying our crs instance and define a WMS
+          // base map
+          var map = new L.Map('map', {
+              crs: crs,
+              continuousWorld: true,
+              worldCopyJump: false,
+              layers: [
+                  L.tileLayer.wms('http://t0.ads.astuntechnology.com/open/osopen/service', {
+                      layers: 'osopen',
+                      format: 'image/png',
+                      maxZoom: 14,
+                      minZoom: 0,
+                      continuousWorld: true,
+                      attribution: 'Astun Data Service &copy; Ordnance Survey.'
+                  })]
+          });
 
-         <input class="selectopt_var" name="var" type="radio" id="var_opt3" value="hurs">
-         <label for="var_opt3" class="option_var">Relative humidity</label>
+          map.setView([52.5, -1.8], 0);
 
-         <input class="selectopt_var" name="var" type="radio" id="var_opt4" value="huss">
-         <label for="var_opt4" class="option_var">Specific humidity</label>
+     </script>
 
-         <input class="selectopt_var" name="var" type="radio" id="var_opt5" value="pr">
-         <label for="var_opt5" class="option_var">Precipitation</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt6" value="prsn">
-         <label for="var_opt6" class="option_var">Snowfall</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt7" value="psl">
-         <label for="var_opt7" class="option_var">Sea level pressure</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt8" value="rls">
-         <label for="var_opt8" class="option_var">Radiation (Net long wave)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt9" value="rss">
-         <label for="var_opt9" class="option_var">Radiation (Net short wave)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt10" value="sfcWind">
-         <label for="var_opt10" class="option_var">Wind speed</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt11" value="snw">
-         <label for="var_opt11" class="option_var">Lying snow</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt12" value="tas">
-         <label for="var_opt12" class="option_var">Temperature (Mean)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt13" value="tasmax">
-         <label for="var_opt13" class="option_var">Temerature (Maximum)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt14" value="tasmin">
-         <label for="var_opt14" class="option_var">Temperature (Minimum)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt15" value="uas">
-         <label for="var_opt15" class="option_var">Wind speed (Eastwards)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt16" value="vas">
-         <label for="var_opt16" class="option_var">Wind speed (Northwards)</label>
-
-         <input class="selectopt_var" name="var" type="radio" id="var_opt17" value="wsgmax10m">
-         <label for="var_opt17" class="option_var">Wind gusts</label>
-       </div>
-
-       <p>Select climate period :</p>
-	  	 <div class="select" tabindex="1" id="per_select">
-         <input class="selectopt" name="per" type="radio" id="per_opt1" value="history" checked>
-         <label for="per_opt1" class="option">1980-1999</label>
-         <input class="selectopt" name="per" type="radio" id="per_opt2" value="current">
-         <label for="per_opt2" class="option">2020-2039</label>
-         <input class="selectopt" name="per" type="radio" id="per_opt3" value="future">
-         <label for="per_opt3" class="option">2060-2079</label>
-       </div>
-       
-       <p>Select season :</p>
-	  	 <div class="select" tabindex="1" id="sea_select">
-         <input class="selectopt" name="sea" type="radio" id="sea_opt1" value="annual" checked>
-         <label for="sea_opt1" class="option">Annual</label>
-         <input class="selectopt" name="sea" type="radio" id="sea_opt2" value="winter">
-         <label for="sea_opt2" class="option">Winter</label>
-         <input class="selectopt" name="sea" type="radio" id="sea_opt3" value="spring">
-         <label for="sea_opt3" class="option">Spring</label>
-         <input class="selectopt" name="sea" type="radio" id="sea_opt4" value="summer">
-         <label for="sea_opt4" class="option">Summer</label>
-         <input class="selectopt" name="sea" type="radio" id="sea_opt5" value="autumn">
-         <label for="sea_opt5" class="option">Autumn</label>
-       </div>
-      
-    </div>
-
-  </div>
-    
-</body>
-</html>‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍‍
+    </head>
+    <body>
+        <div id="map"></div>
+        
+    </body>
+</html>

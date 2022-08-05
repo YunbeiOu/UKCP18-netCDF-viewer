@@ -107,30 +107,18 @@ require([
   
       var vtlLayer = new TileLayer({
       url: lyr_url,
-      spatialReference: 27700
+      spatialReference: 27700,
+      title: legend_dict[var_value]
       });
+
 
       // view.ui.empty("manual");
       map.removeAll();
       
 
       map.layers.add(vtlLayer);
-      map.layers.add(fealayer);
-      map.layers.add(fealayer2);
-      map.layers.add(fealayer3);
+      map.layers.add(boundary_lyr);
       map.layers.add(vtlLayer_GB);
-
-      // // Add swipe widget
-      // // create a new Swipe widget
-      // const swipe = new Swipe({
-      //   leadingLayers: [fealayer2],
-      //   trailingLayers: [vtlLayer],
-      //   position: 35, // set position of widget to 35%
-      //   view: view
-      // });
-      // // add the widget to the view
-      // view.ui.add(swipe,"manual");
-
 
 
       // view.ui.remove(legend);
@@ -152,7 +140,8 @@ require([
   
     var vtlLayer = new TileLayer({
     url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_history_annual/MapServer",
-    spatialReference: 27700
+    spatialReference: 27700,
+    title: "Cloud cover (%)"
     });
   
     var vtlLayer2 = new TileLayer({
@@ -161,40 +150,45 @@ require([
     });
   
     // Create featurelayer from feature service
-    const fealayer = new FeatureLayer({
+    const boundary_lyr = new FeatureLayer({
       // URL to the service
-      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm1/FeatureServer"
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm1/FeatureServer",
+      title: "GB boundary"
       // labelingInfo: [labelClass],
     });
 
-    let fealayer2 = new FeatureLayer({
+    var fealayer = new FeatureLayer({
       // URL to the vector tile service
-      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/socio_eco_uk/FeatureServer"
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/socio_eco_uk/FeatureServer",
+      title: "Economic activity"
     });
 
-    let fealayer3 = new FeatureLayer({
+
+
+    var fealayer3 = new FeatureLayer({
       // URL to the vector tile service
-      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/all_residents/FeatureServer"
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/all_residents/FeatureServer",
+      title: 'Number of residents'
     });
 
-    let vtlLayer_GB = new VectorTileLayer({
+    var vtlLayer_GB = new VectorTileLayer({
       // URL to the vector tile service
-      url: "https://uomanchester.maps.arcgis.com/sharing/rest/content/items/796bcd7e487b416ba3420d1ffc8649d7/resources/styles/root.json"
+      url: "https://uomanchester.maps.arcgis.com/sharing/rest/content/items/796bcd7e487b416ba3420d1ffc8649d7/resources/styles/root.json",
+      title: 'Label'
     });
 
 
   
-    let map = new Map({
+    var map = new Map({
       basemap: {
         portalItem: {
-          // id: "0bd3a4a6fd674a90a7d0a9e5f36fb59b" // OS Open Carto
           id: "a118075240bc4e4f8062265ecdad0e7e" // Open Grey
         }
       },
-      layers: [vtlLayer,fealayer,fealayer2,fealayer3,vtlLayer_GB]
+      layers: [vtlLayer,boundary_lyr,vtlLayer_GB]
     });
 
-    let view = new MapView({
+    var view = new MapView({
       spatialReference: 27700, 
       container: "viewDiv",
       map: map,
@@ -203,62 +197,6 @@ require([
     });
 
     view.ui.add("titleDiv", "top-right");
-
-       // Add the search widget to the top right corner of the view
-    // const searchWidget = new Search({
-    // view: view
-    // });
-
-    // view.ui.add(searchWidget, {
-    //   position: "top-right",
-    //   index:2,
-    // });
-
-    // const searchWidget = new Search({
-    //   view: view,
-    //   allPlaceholder: "District/Local authority",
-    //   includeDefaultSources: false,
-    //   sources: [
-    //     {
-    //       layer: fealayer2,
-    //       searchFields: ["NAME_2"],
-    //       displayField: "NAME_2",
-    //       exactMatch: false,
-    //       outFields: ["NAME_1","NAME_2", "TYPE_2"],
-    //       name: "Local authority (districts)",
-    //       placeholder: "example: Manchester"
-    //     },
-    //     {
-    //       layer: fealayer,
-    //       searchFields: ["Name_1"],
-    //       exactMatch: false,
-    //       outFields: ["Name_1"],
-    //       placeholder: "example: England",
-    //       name: "Senators",
-    //       zoomScale: 500000,
-    //     }
-    //   ]
-    // });
-
-    // // Add the search widget to the top left corner of the view
-    // view.ui.add(searchWidget, {
-    //   position: "top-right"
-    // });
-
-
- 
-    // // time slider widget initialization
-    // const timeSlider = new TimeSlider({
-    //   container: "timeSlider",
-    //   view: view,
-    //   timeVisible: true, // show the time stamps on the timeslider
-    //   loop: true
-    // });
-
-
- 
-
-
 
     // Add legend
     const activeLayer = map.layers.getItemAt(0);
@@ -276,17 +214,9 @@ require([
     // Add widget to the bottom right corner of the view
     view.ui.add(legend, "bottom-right");
 
+      
 
-    // Add swipe widget
-    // create a new Swipe widget
-    const swipe = new Swipe({
-      leadingLayers: [fealayer2,fealayer3],
-      trailingLayers: [vtlLayer],
-      position: 35, // set position of widget to 35%
-      view: view
-    });
-    // add the widget to the view
-    view.ui.add(swipe,"manual");
+
 
 
     // Add home button
@@ -306,14 +236,18 @@ require([
     });
 
 
-    // // Add layerlist widget
-    // let layerList = new LayerList({
-    //   view: view
-    // });
-    // // Adds widget below other elements in the top left corner of the view
-    // view.ui.add(layerList, {
-    //   position: "top-left"
-    // });
+    // Add layerlist widget
+    let layerList = new LayerList({
+      view: view
+    });
+    layerListExpand = new Expand({
+      expandIconClass: "esri-icon-layer-list",  // see https://developers.arcgis.com/javascript/latest/guide/esri-icon-font/
+      // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
+      view: view,
+      content: layerList
+    });
+    view.ui.add(layerListExpand, "top-left");
+
 
 
     // Add button behaviors
