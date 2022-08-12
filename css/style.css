@@ -229,6 +229,21 @@ input.selectopt_var:checked + label.option_var {
   }
 
 
+  .rampPicker {
+    padding: 7px;
+    background-color: white;
+    z-index: 3;
+  }
+
+  .ramp {
+    padding-bottom: 2px;
+    padding-top: 2px;
+    z-index: 3;
+  }
+
+  #rampNames {
+    z-index: 10;
+  }
 
 /* html, body {
   padding: 0;

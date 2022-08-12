@@ -14,8 +14,10 @@ require([
   "esri/widgets/TimeSlider",
   "esri/widgets/Home",
   "esri/widgets/Locate",
-  "esri/widgets/LayerList"
-], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate,LayerList) {
+  "esri/widgets/LayerList",
+  "esri/smartMapping/symbology/support/colorRamps",
+  "esri/symbols/support/symbolUtils"
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate,LayerList,colorRamps,symbolUtils) {
 
    const labelClass = {
           // autocasts as new LabelClass()
@@ -269,7 +271,98 @@ require([
       document.getElementById(id_name).addEventListener("click",show_lyr);
     }
 
+    // Test color ramps
+    // const rampsContainer = document.getElementById("rampsContainer");
+    // rampsContainer.innerHTML = "";
+    // rampsContainer.classList.add("rampPicker");
 
+    // const colorRampNames = colorRamps.names();
+    // console.log(colorRampNames)
+
+    // const colorRamp = colorRamps.byName("Blue and Red 7")
+    // const continuousColors = colorRamp.colors;
+    
+    // const maxWidth = 300;
+
+    // const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
+    //   align: "horizontal",
+    //   gradient: true,
+    //   width: maxWidth
+    // });
+
+    // const colorRampElementContainer = document.createElement("div");
+    // colorRampElementContainer.classList.add("ramp");
+
+    // colorRampElementContainer.appendChild(colorRampElement);
+    // rampsContainer.appendChild(colorRampElementContainer);
+
+
+    // Add colorramp selector
+    // const selectElement = document.getElementById("rampNames");
+    //     const body = document.body;
+
+    //     body.appendChild(selectElement);
+    //     const colorRampNames = colorRamps.names();
+    //     colorRampNames.sort(function(a, b) {
+    //       return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
+    //     });
+
+    //     colorRampNames.forEach(function(name){
+    //       const option = document.createElement("option");
+    //       option.value = name;
+    //       option.text = name;
+    //       selectElement.appendChild(option);
+    //     });
+    //     selectElement.value = "Blue 6";
+    //     renderRamp();
+
+    //     selectElement.addEventListener("change", renderRamp);
+
+    //     function renderRamp(){
+
+    //       const rampName = selectElement.value;
+
+    //       const maxWidth = 300;
+
+    //       const rampsContainer = document.getElementById("rampsContainer");
+    //       rampsContainer.innerHTML = "";
+    //       rampsContainer.classList.add("rampPicker");
+
+    //       const colorRamp = colorRamps.byName(rampName);
+
+    //       const continuousColors = colorRamp.colors;
+    //       const discreteColors = colorRamp.colorsForClassBreaks;
+
+    //       discreteColors.forEach(function(ramp){
+
+    //         // renders a color ramp discretely, each color in a square
+    //         const colorRampElement = symbolUtils.renderColorRampPreviewHTML(ramp.colors, {
+    //           align: "horizontal",
+    //           gradient: false,
+    //           width: maxWidth * (ramp.numClasses / 10)
+    //         });
+
+    //         const colorRampElementContainer = document.createElement("div");
+    //         colorRampElementContainer.classList.add("ramp");
+    //         colorRampElementContainer.appendChild(colorRampElement);
+    //         rampsContainer.appendChild(colorRampElementContainer);
+    //       });
+
+    //       // renders a color ramp as a continuous gradient
+    //       const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
+    //         align: "vertical",
+    //         gradient: true,
+    //         width: 20,
+    //         height: 300
+    //       });
+
+    //       const colorRampElementContainer = document.createElement("div");
+    //       colorRampElementContainer.classList.add("ramp");
+
+    //       colorRampElementContainer.appendChild(colorRampElement);
+    //       rampsContainer.appendChild(colorRampElementContainer);
+    //     }
+  
 });
 
 

@@ -36,10 +36,17 @@
             layers: 'osopen',
             format: 'image/png',
             maxZoom: 14,
-            minZoom: 5,
+            minZoom: 0,
             continuousWorld: true,
             attribution: 'Astun Data Service &copy; Ordnance Survey.'
         });
+
+  var baseL2 = L.esri.Vector.vectorBasemapLayer("ArcGIS:Streets", {
+    apikey: 'AAPK35d80ea68cb74c67ad55267328fec2fbbyi59Hag_Wi5AEluiTPKOvvPiBh0RrAk8dzCpWnZWlTD77RFHrO1sud2UEcT9ZVx',
+    maxZoom: 14,
+    minZoom: 0,
+  });
+
 
   var map = new L.Map('map', {
     crs: crs,
@@ -49,6 +56,8 @@
         baseL]
 }).setView([53.386, -2.319], 5);
 
+
+
   // The min/maxZoom values provided should match the actual cache thats been published. This information can be retrieved from the service endpoint directly.
   // L.esri.tiledMapLayer({
   //   url: 'https://tiles.arcgis.com/tiles/qHLhLQrcvEnxjtPr/arcgis/rest/services/OS_Open_Background_2/MapServer',
@@ -56,21 +65,23 @@
   //   minZoom: 6
   // }).addTo(map);
 
+
+
   var leftL = L.esri.tiledMapLayer({
     url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/wsgmax10m_future_autumn/MapServer',
     maxZoom: 14,
-    minZoom: 5
+    minZoom: 0
   })
   .addTo(map);
 
   var rightL= L.esri.tiledMapLayer({
     url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/tas_current_autumn/MapServer',
     maxZoom: 14,
-    minZoom: 5
+    minZoom: 0
   })
   .addTo(map);
 
-
+  rightL.bringToFront()
 
 
 
@@ -88,44 +99,20 @@
   // }).addTo(map);
 
 
-  // var otherL = L.esri.featureLayer({
-  //   url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/all_residents/FeatureServer/0"
-  // })
-  // .addTo(map);
 
-
+  // Add side by side controller
   var sideBySide = L.control.sideBySide([],[]).addTo(map);
   sideBySide.setLeftLayers([leftL]);
   sideBySide.setRightLayers([rightL]);
 
-//   map.removeLayer(weatherL2);
-//   map.removeLayer(weatherL);
-
-
-//   var weatherL3 = L.esri.tiledMapLayer({
-//     url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/flashrate_current_autumn/MapServer',
-//     maxZoom: 14,
-//     minZoom: 5
-//   })
-//   .addTo(map);
-
-//   var weatherL4 = L.esri.tiledMapLayer({
-//     url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/pr_current_autumn/MapServer',
-//     maxZoom: 14,
-//     minZoom: 5
-//   })
-//   .addTo(map);
-
-//   sideBySide.setLeftLayers([weatherL3]);
-//   sideBySide.setRightLayers([weatherL4]);
 
 let url_head = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/';
 
 let url_end = '/MapServer';
 
-var leftL;
+// var leftL;
 
-var rightL;
+// var rightL;
 
 var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_history_annual/MapServer';
 
@@ -167,27 +154,64 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
       }
     }
 
+    radios = document.getElementsByName('pan');
+    var pan_value;
+    for (var i = 0, length = radios.length; i < length; i++) {
+      if (radios[i].checked) {
+        // do whatever you want with the checked radio
+        pan_value = radios[i].value;
+        
+        // only one radio can be logically checked, don't check the rest
+        break;
+      }
+    }
+
+
+
     layer_name = var_value + '_' + per_value + '_' + sea_value
 
     lyr_url = (url_head.concat(layer_name)).concat(url_end);
 
 
-    leftL = L.esri.tiledMapLayer({
-        url: lyr_url,
-        maxZoom: 14,
-        minZoom: 5
-    })
-    .addTo(map);
+    // leftL = L.esri.tiledMapLayer({
+    //     url: lyr_url,
+    //     maxZoom: 14,
+    //     minZoom: 5
+    // })
+    // .addTo(map);
 
-    rightL = L.esri.tiledMapLayer({
-        url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/pr_current_autumn/MapServer',
-        maxZoom: 14,
-        minZoom: 5
-    })
-    .addTo(map);
+    // rightL = L.esri.tiledMapLayer({
+    //     url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/pr_current_autumn/MapServer',
+    //     maxZoom: 14,
+    //     minZoom: 5
+    // })
+    // .addTo(map);
 
-    sideBySide.setLeftLayers([leftL]);
-    sideBySide.setRightLayers([rightL]);
+    if (pan_value === 'left') {
+        leftL = L.esri.tiledMapLayer({
+            url: lyr_url,
+            maxZoom: 14,
+            minZoom: 5
+        })
+        .addTo(map);
+        leftL.bringToFront();
+        sideBySide.setLeftLayers([leftL]);
+    }
+
+    
+    if (pan_value === 'right') {
+        rightL = L.esri.tiledMapLayer({
+            url: lyr_url,
+            maxZoom: 14,
+            minZoom: 5
+        })
+        .addTo(map);
+        rightL.bringToFront();
+        sideBySide.setRightLayers([rightL]);
+    }
+
+    // sideBySide.setLeftLayers([leftL]);
+    // sideBySide.setRightLayers([rightL]);
 
 
   }
@@ -217,3 +241,61 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
     console.log(id_name)
     document.getElementById(id_name).addEventListener("click",show_lyr);
     }
+
+    // map.removeLayer(TopoLayer);
+
+    // Add legend
+    // Get the esri legend
+    require(["esri/smartMapping/symbology/support/colorRamps",
+    "esri/symbols/support/symbolUtils"
+    ], function(colorRamps,symbolUtils) {
+
+      const mapcolorRamp = colorRamps.byName("Blue and Red 8")
+      const continuousColors = mapcolorRamp.colors;
+
+      const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
+        align: "vertical",
+        gradient: true,
+        width: 15,
+        height: 145
+      });
+      console.log(colorRampElement)
+
+          // Add to map
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend');
+
+
+
+        grades = ['1005', '1007.5', '&ensp', '&ensp', '&ensp', '&ensp', '&ensp','1025'];
+
+        for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+              // '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+              grades[i] + ('<br>');
+      }
+
+      var ramp_div = L.DomUtil.create('div', 'ramp_div');
+
+      ramp_div.appendChild(colorRampElement);
+
+      div.appendChild(ramp_div);
+    
+      console.log(ramp_div);
+      console.log(div)
+
+      return div;
+  };
+
+    legend.addTo(map);
+
+
+
+    });
+
+
+
+  

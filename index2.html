@@ -13,6 +13,7 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin=""></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css">
 
   <!-- Load Esri Leaflet from CDN -->
   <script src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js"
@@ -21,6 +22,8 @@
   
   <script src="leaflet-providers-master/leaflet-providers.js"></script>
   <script src="lib/leaflet-side-by-side.min.js"></script>
+  <script src="https://unpkg.com/esri-leaflet-vector@3.1.3/dist/esri-leaflet-vector.js" crossorigin=""></script>
+  
 </head>
 
 <body>
@@ -28,10 +31,16 @@
 <!-- Proj4 and Proj4Leaflet -->
 <script src="https://unpkg.com/proj4@2.4.3"></script>
 <script src="https://unpkg.com/proj4leaflet@1.0.1"></script>
+<script src="https://js.arcgis.com/4.24/"></script>
 <!-- Load shapeMarkers from CDN -->
-<script src="https://unpkg.com/leaflet-shape-markers@1.0.6"></script>
+<!-- <script src="https://unpkg.com/leaflet-shape-markers@1.0.6"></script> -->
 
-<div id="map"></div>
+<div id="map">
+  <div id="legend">
+    <div id="ramp_div"></div>
+    <div id="text_div"></div>
+  </div>
+</div>
 
 
 
@@ -122,6 +131,8 @@
     <input class="selectopt_sw" name="pan" type="radio" id="pan_opt2" value="right">
     <label for="pan_opt2" class="option_btn">Right panel</label>
   </div>
+
+
  
 </div>
 

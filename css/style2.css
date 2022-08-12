@@ -16,7 +16,63 @@ html, body {
   margin: 0;
   z-index:1; }
 
+  /* #rampsContainer {
+    position:absolute;
+    left: 10px;
+    bottom: 10px;
+    width: 30px;
+    height: 50px;
+    background-color: white ;
+    z-index: 10;
+  }
+  
+  .rampPicker {
+    padding: 7px;
+    background-color: white;
+    /* z-index: 10; */
+  /* } */
 
+  /* .ramp {
+    padding-bottom: 2px;
+    padding-top: 2px;
+  }  */
+
+  .legend {
+    position: absolute;
+    right:10px;
+    bottom: 10px;
+    background-color: white;
+    height: 145px;
+    width: 100px;
+    color: #555;
+    display: flex;
+    /* z-index: 5; */
+}
+
+
+.ramp_div {
+  left:0;
+  height:145px;
+  width:20px;
+  z-index: 5;
+  /* background-color: black; */
+}
+
+/* .text_div {
+  right:0;
+  background-color: red;
+  color: #555;
+  height:100%;
+  width:70%;
+}  */
+
+/* .legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+} */
 
   #panel {
     position: absolute;
@@ -196,4 +252,6 @@ html, body {
       content: '';
       background:#666;
       }
+
+      /* switch button */
 
