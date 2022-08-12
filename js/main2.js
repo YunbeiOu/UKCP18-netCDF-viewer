@@ -257,7 +257,7 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
         align: "vertical",
         gradient: true,
         width: 15,
-        height: 145
+        height: 200
       });
       console.log(colorRampElement)
 
@@ -270,12 +270,12 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
 
 
 
-        grades = ['1005', '1007.5', '&ensp', '&ensp', '&ensp', '&ensp', '&ensp','1025'];
+        grades = ['1005', '1009', '1013', '1017', '1021', '1025'];
 
         for (var i = 0; i < grades.length; i++) {
           div.innerHTML +=
               // '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-              grades[i] + ('<br>');
+              grades[i] + ('<br>') + ('<br>');
       }
 
       var ramp_div = L.DomUtil.create('div', 'ramp_div');
