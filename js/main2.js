@@ -68,14 +68,14 @@
 
 
   var leftL = L.esri.tiledMapLayer({
-    url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/wsgmax10m_future_autumn/MapServer',
+    url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_history_annual/MapServer',
     maxZoom: 14,
     minZoom: 0
   })
   .addTo(map);
 
   var rightL= L.esri.tiledMapLayer({
-    url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/tas_current_autumn/MapServer',
+    url: 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/tas_history_annual/MapServer',
     maxZoom: 14,
     minZoom: 0
   })
@@ -115,6 +115,9 @@ let url_end = '/MapServer';
 // var rightL;
 
 var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_history_annual/MapServer';
+
+var legend;
+var legend_L;
 
   function show_lyr() {
     var radios = document.getElementsByName('var');
@@ -213,6 +216,54 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
     // sideBySide.setLeftLayers([leftL]);
     // sideBySide.setRightLayers([rightL]);
 
+    //refresh legend
+    require(["esri/smartMapping/symbology/support/colorRamps",
+    "esri/symbols/support/symbolUtils"
+    ], function(colorRamps,symbolUtils) {
+
+      const mapcolorRampNL = colorRamps.byName("Point Cloud 1")
+      const continuousColorsNL = mapcolorRampNL.colors;
+  
+      const colorRampElementNL = symbolUtils.renderColorRampPreviewHTML(continuousColorsNL, {
+        align: "vertical",
+        gradient: true,
+        width: 15,
+        height: 230
+      });
+      console.log(colorRampElementNL);
+
+      // if (legend_L instanceof L.Control) { map.removeControl(legend_L);}
+      var leg = L.DomUtil.get('.legend_L');
+      console.log(leg);
+
+      // var legend_NL = L.control({position: 'topleft'});
+
+      // legend_NL.onAdd = function (map) {
+
+      // var div = L.DomUtil.create('div', 'legend_L');
+
+      // grades = ['0000', '47.5', '&nbsp&nbsp65', '82.5', '&nbsp100'];
+
+      // for (var i = 0; i < grades.length; i++) 
+      // {
+      //   div.innerHTML += grades[i] + ('<br>') + ('<br>') + ('<br>');
+      // }
+
+      // var ramp_div_L = L.DomUtil.create('div', 'ramp_div_L');
+
+      // ramp_div_L.appendChild(colorRampElementNL);
+
+      // div.appendChild(ramp_div_L);
+    
+      // console.log(ramp_div_L);
+      // console.log(div);
+
+      // return div;
+      // };
+
+      // legend_NL.addTo(map);
+
+      });
 
   }
 
@@ -223,26 +274,22 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
     var id_name = 'var_opt'+ (i+1);
     document.getElementById(id_name).addEventListener("click",show_lyr);
     }
-
     for (var i = 0, length = 3; i<length; i++) {
     var id_name = 'per_opt'+ (i+1);
     console.log(id_name)
     document.getElementById(id_name).addEventListener("click",show_lyr);
     }
-
     for (var i = 0, length = 5; i<length; i++) {
     var id_name = 'sea_opt'+ (i+1);
     console.log(id_name)
     document.getElementById(id_name).addEventListener("click",show_lyr);
     }
-
     for (var i = 0, length = 2; i<length; i++) {
     var id_name = 'pan_opt'+ (i+1);
     console.log(id_name)
     document.getElementById(id_name).addEventListener("click",show_lyr);
     }
 
-    // map.removeLayer(TopoLayer);
 
     // Add legend
     // Get the esri legend
@@ -250,49 +297,87 @@ var lyr_url = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/servi
     "esri/symbols/support/symbolUtils"
     ], function(colorRamps,symbolUtils) {
 
-      const mapcolorRamp = colorRamps.byName("Blue and Red 8")
-      const continuousColors = mapcolorRamp.colors;
+    const mapcolorRamp = colorRamps.byName("Blue and Red 10")
+    const continuousColors = mapcolorRamp.colors;
 
-      const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
-        align: "vertical",
-        gradient: true,
-        width: 15,
-        height: 200
-      });
-      console.log(colorRampElement)
+    const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
+      align: "vertical",
+      gradient: true,
+      width: 15,
+      height: 230
+    });
+    console.log(colorRampElement);
 
-          // Add to map
-    var legend = L.control({position: 'bottomright'});
+    // Add to map
+    legend = L.control({position: 'bottomright'});
 
     legend.onAdd = function (map) {
 
-        var div = L.DomUtil.create('div', 'info legend');
+    var div = L.DomUtil.create('div', 'legend');
 
+    grades = ['30', '24', '18', '12', '&nbsp6'];
 
+    for (var i = 0; i < grades.length; i++) {
+      div.innerHTML +=
+          // '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+          grades[i] + ('<br>') + ('<br>') + ('<br>');
+    }
 
-        grades = ['1005', '1009', '1013', '1017', '1021', '1025'];
+    var ramp_div = L.DomUtil.create('div', 'ramp_div');
 
-        for (var i = 0; i < grades.length; i++) {
-          div.innerHTML +=
-              // '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-              grades[i] + ('<br>') + ('<br>');
-      }
+    ramp_div.appendChild(colorRampElement);
 
-      var ramp_div = L.DomUtil.create('div', 'ramp_div');
+    div.appendChild(ramp_div);
+  
+    console.log(ramp_div);
+    console.log(div);
 
-      ramp_div.appendChild(colorRampElement);
-
-      div.appendChild(ramp_div);
-    
-      console.log(ramp_div);
-      console.log(div)
-
-      return div;
-  };
+    return div;
+    };
 
     legend.addTo(map);
 
 
+    // Add legend on the left map
+    const mapcolorRampL = colorRamps.byName("Green 25")
+    const continuousColorsL = mapcolorRampL.colors;
+
+    const colorRampElementL = symbolUtils.renderColorRampPreviewHTML(continuousColorsL, {
+      align: "vertical",
+      gradient: true,
+      width: 15,
+      height: 230
+    });
+    console.log(colorRampElementL);
+
+        // Add to map
+    legend_L = L.control({position: 'bottomleft'});
+
+    legend_L.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'legend_L');
+
+    grades = ['&nbsp&nbsp30', '47.5', '&nbsp&nbsp65', '82.5', '&nbsp100'];
+
+    for (var i = 0; i < grades.length; i++) {
+      div.innerHTML +=
+          // '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+          grades[i] + ('<br>') + ('<br>') + ('<br>');
+    }
+
+    var ramp_div_L = L.DomUtil.create('div', 'ramp_div_L');
+
+    ramp_div_L.appendChild(colorRampElementL);
+
+    div.appendChild(ramp_div_L);
+  
+    console.log(ramp_div_L);
+    console.log(div);
+
+    return div;
+    };
+
+    legend_L.addTo(map);
 
     });
 

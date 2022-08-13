@@ -42,7 +42,7 @@ html, body {
     right:10px;
     bottom: 10px;
     background-color: white;
-    height: 200px;
+    height: 230px;
     width: 50px;
     color: #555;
     display: flex;
@@ -50,10 +50,31 @@ html, body {
     /* z-index: 5; */
 }
 
+.legend_L {
+  position: absolute;
+  left:10px;
+  bottom: 10px;
+  background-color: white;
+  height: 230px;
+  width: 50px;
+  color: #555;
+  display: flex;
+  padding: 20px;
+  z-index: 5;
+}
 
 .ramp_div {
   right:10px;
-  height:200px;
+  height:230px;
+  width:20px;
+  z-index: 5;
+  padding-left: 10px;
+  /* background-color: black; */
+}
+
+.ramp_div_L {
+  right:10px;
+  height:230px;
   width:20px;
   z-index: 5;
   padding-left: 10px;
