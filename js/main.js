@@ -120,7 +120,9 @@ require([
 
       map.layers.add(vtlLayer);
       map.layers.add(boundary_lyr);
+      map.layers.add(boundary_lyr_mosa);
       map.layers.add(vtlLayer_GB);
+
 
 
       // view.ui.remove(legend);
@@ -159,6 +161,12 @@ require([
       // labelingInfo: [labelClass],
     });
 
+    var boundary_lyr_mosa = new FeatureLayer({
+      // URL to the vector tile service
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2/FeatureServer",
+      title: "Authority boundaries"
+    });
+
     var fealayer = new FeatureLayer({
       // URL to the vector tile service
       url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/socio_eco_uk/FeatureServer",
@@ -180,6 +188,45 @@ require([
     });
 
 
+    // Add pop-up for boundary_lyr_mosa
+    // Create pop-up template object
+    const template = {
+      // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
+      title: "{NAME_2}, {NAME_1}",
+    };
+
+    boundary_lyr_mosa.popupTemplate = template;
+
+    // // Add content to the PopupTemplate
+
+    // const template = {
+    //   // autocasts as new PopupTemplate()
+    //   title: "{NAME_2}, {NAME_1}",
+    //   content: [
+    //     {
+    //       type: "fields",
+    //       fieldInfos: [
+    //         {
+    //           fieldName: "B12001_calc_pctMarriedE",
+    //           label: "Married %"
+    //         },
+    //         {
+    //           fieldName: "B12001_calc_numMarriedE",
+    //           label: "People Married"
+    //         },
+    //         {
+    //           fieldName: "B12001_calc_numNeverE",
+    //           label: "People that Never Married"
+    //         },
+    //         {
+    //           fieldName: "B12001_calc_numDivorcedE",
+    //           label: "People Divorced"
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // };
+
   
     var map = new Map({
       basemap: {
@@ -187,7 +234,7 @@ require([
           id: "a118075240bc4e4f8062265ecdad0e7e" // Open Grey
         }
       },
-      layers: [vtlLayer,boundary_lyr,vtlLayer_GB]
+      layers: [vtlLayer,boundary_lyr,boundary_lyr_mosa,vtlLayer_GB]
     });
 
     var view = new MapView({
@@ -271,97 +318,6 @@ require([
       document.getElementById(id_name).addEventListener("click",show_lyr);
     }
 
-    // Test color ramps
-    // const rampsContainer = document.getElementById("rampsContainer");
-    // rampsContainer.innerHTML = "";
-    // rampsContainer.classList.add("rampPicker");
-
-    // const colorRampNames = colorRamps.names();
-    // console.log(colorRampNames)
-
-    // const colorRamp = colorRamps.byName("Blue and Red 7")
-    // const continuousColors = colorRamp.colors;
-    
-    // const maxWidth = 300;
-
-    // const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
-    //   align: "horizontal",
-    //   gradient: true,
-    //   width: maxWidth
-    // });
-
-    // const colorRampElementContainer = document.createElement("div");
-    // colorRampElementContainer.classList.add("ramp");
-
-    // colorRampElementContainer.appendChild(colorRampElement);
-    // rampsContainer.appendChild(colorRampElementContainer);
-
-
-    // Add colorramp selector
-    // const selectElement = document.getElementById("rampNames");
-    //     const body = document.body;
-
-    //     body.appendChild(selectElement);
-    //     const colorRampNames = colorRamps.names();
-    //     colorRampNames.sort(function(a, b) {
-    //       return a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'});
-    //     });
-
-    //     colorRampNames.forEach(function(name){
-    //       const option = document.createElement("option");
-    //       option.value = name;
-    //       option.text = name;
-    //       selectElement.appendChild(option);
-    //     });
-    //     selectElement.value = "Blue 6";
-    //     renderRamp();
-
-    //     selectElement.addEventListener("change", renderRamp);
-
-    //     function renderRamp(){
-
-    //       const rampName = selectElement.value;
-
-    //       const maxWidth = 300;
-
-    //       const rampsContainer = document.getElementById("rampsContainer");
-    //       rampsContainer.innerHTML = "";
-    //       rampsContainer.classList.add("rampPicker");
-
-    //       const colorRamp = colorRamps.byName(rampName);
-
-    //       const continuousColors = colorRamp.colors;
-    //       const discreteColors = colorRamp.colorsForClassBreaks;
-
-    //       discreteColors.forEach(function(ramp){
-
-    //         // renders a color ramp discretely, each color in a square
-    //         const colorRampElement = symbolUtils.renderColorRampPreviewHTML(ramp.colors, {
-    //           align: "horizontal",
-    //           gradient: false,
-    //           width: maxWidth * (ramp.numClasses / 10)
-    //         });
-
-    //         const colorRampElementContainer = document.createElement("div");
-    //         colorRampElementContainer.classList.add("ramp");
-    //         colorRampElementContainer.appendChild(colorRampElement);
-    //         rampsContainer.appendChild(colorRampElementContainer);
-    //       });
-
-    //       // renders a color ramp as a continuous gradient
-    //       const colorRampElement = symbolUtils.renderColorRampPreviewHTML(continuousColors, {
-    //         align: "vertical",
-    //         gradient: true,
-    //         width: 20,
-    //         height: 300
-    //       });
-
-    //       const colorRampElementContainer = document.createElement("div");
-    //       colorRampElementContainer.classList.add("ramp");
-
-    //       colorRampElementContainer.appendChild(colorRampElement);
-    //       rampsContainer.appendChild(colorRampElementContainer);
-    //     }
   
 });
 
