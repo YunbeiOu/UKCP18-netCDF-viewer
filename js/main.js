@@ -163,7 +163,7 @@ require([
 
     var boundary_lyr_mosa = new FeatureLayer({
       // URL to the vector tile service
-      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2/FeatureServer",
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_black/FeatureServer",
       title: "Authority boundaries"
     });
 
