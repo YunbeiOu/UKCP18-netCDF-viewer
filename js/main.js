@@ -124,7 +124,6 @@ require([
       map.layers.add(vtlLayer_GB);
 
 
-
       // view.ui.remove(legend);
       view.ui.empty("bottom-right");
 
@@ -242,8 +241,23 @@ require([
       container: "viewDiv",
       map: map,
       center: new Point({x: 350000, y: 500000, spatialReference: 27700}),
-      zoom: 4
+      zoom: 4,
+
     });
+
+    view.constraints = {
+      minZoom: 4,
+      maxZoom: 9
+      };
+    
+    // Set the extent on the view
+    // view.extent = new Extent({
+    //   xmin: 350000,
+    //   ymin: 500000,
+    //   xmax: 350000,
+    //   ymax: 500000,
+    //   spatialReference:  27700
+    // });
 
     view.ui.add("titleDiv", "top-right");
 

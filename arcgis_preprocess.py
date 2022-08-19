@@ -231,8 +231,8 @@ seasons = ['winter','spring','summer','autumn']
 
 # out_period_dir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_output\\"
 
-# periods = ['history','current','future']
-# ann_seasons = ['annual','winter','spring','summer','autumn']
+periods = ['history','current','future']
+ann_seasons = ['annual','winter','spring','summer','autumn']
 # # for var_name in var_list:
 # #     for season_name in seasons:
 # #         for i in range(3):
@@ -433,55 +433,55 @@ seasons = ['winter','spring','summer','autumn']
 
 
 
-# Previous version (worked)
-# 5. Share as web layer
-# Sign in to portal
-# arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
+# # Previous version (worked)
+# # 5. Share as web layer
+# # Sign in to portal
+# # arcpy.SignInToPortal("https://www.arcgis.com", "h59201yo", "Oyb9865761885!")
 
-# Set output file names
-outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
+# # Set output file names
+# outdir = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\Service_definition"
 
-# Reference map to publish
-prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_Period.aprx"
-# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx"
-aprx = arcpy.mp.ArcGISProject(prjPath)
-m = aprx.listMaps('Map')[0]
-
-# out_layer_file = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyr'
-
-# arcpy.SaveToLayerFile_management(m.listLayers('clt_1982_autumn')[0], out_layer_file, "ABSOLUTE")
-# m.addDataFromPath('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyrx')
-# aprx.save()
+# # Reference map to publish
+# prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_Period.aprx"
+# # prjPath = "C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\MyProject_MSc_Diss_Symb_MinMax_ALL.aprx"
+# aprx = arcpy.mp.ArcGISProject(prjPath)
 # m = aprx.listMaps('Map')[0]
-l = m.listLayers('clt_history_spring')[0]
+
+# # out_layer_file = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyr'
+
+# # arcpy.SaveToLayerFile_management(m.listLayers('clt_1982_autumn')[0], out_layer_file, "ABSOLUTE")
+# # m.addDataFromPath('C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\output\\save_LYR.lyrx')
+# # aprx.save()
+# # m = aprx.listMaps('Map')[0]
+# l = m.listLayers('clt_history_spring')[0]
 
 
-# Create TileSharingDraft and set service properties
-service = 'TestWebSharing_15'
-sddraft_filename = service + ".sddraft"
-sddraft_output_filename = os.path.join(outdir, sddraft_filename)
-sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, l)
-sharing_draft.summary = "UKCP_test_1"
-sharing_draft.tags = "clt_test_1"
-sharing_draft.overwriteExistingService = 'overwriteService'
+# # Create TileSharingDraft and set service properties
+# service = 'TestWebSharing_15'
+# sddraft_filename = service + ".sddraft"
+# sddraft_output_filename = os.path.join(outdir, sddraft_filename)
+# sharing_draft = m.getWebLayerSharingDraft("HOSTING_SERVER", "TILE", service, l)
+# sharing_draft.summary = "UKCP_test_1"
+# sharing_draft.tags = "clt_test_1"
+# sharing_draft.overwriteExistingService = 'overwriteService'
 
-# Create Service Definition Draft file
-sharing_draft.exportToSDDraft(sddraft_output_filename)
+# # Create Service Definition Draft file
+# sharing_draft.exportToSDDraft(sddraft_output_filename)
 
-# Stage Service
-sd_filename = service + ".sd"
-sd_output_filename = os.path.join(outdir,sd_filename)
-# arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
-arcpy.StageService_server(sddraft_output_filename, sd_output_filename)
+# # Stage Service
+# sd_filename = service + ".sd"
+# sd_output_filename = os.path.join(outdir,sd_filename)
+# # arcpy.server.StageService(sddraft_output_filename,sd_output_filename)
+# arcpy.StageService_server(sddraft_output_filename, sd_output_filename)
 
-# Share to portal
-print("Uploading Service Definition...")
-# arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services",in_override='OVERRIDE_DEFINITION',
+# # Share to portal
+# print("Uploading Service Definition...")
+# # arcpy.server.UploadServiceDefinition(sd_output_filename,"My Hosted Services",in_override='OVERRIDE_DEFINITION',
+# # in_public='PUBLIC',in_organization='SHARE_ORGANIZATION')
+# output = arcpy.UploadServiceDefinition_server(sd_output_filename,"My Hosted Services",in_override='OVERRIDE_DEFINITION',
 # in_public='PUBLIC',in_organization='SHARE_ORGANIZATION')
-output = arcpy.UploadServiceDefinition_server(sd_output_filename,"My Hosted Services",in_override='OVERRIDE_DEFINITION',
-in_public='PUBLIC',in_organization='SHARE_ORGANIZATION')
 
-print("Successfully upload service.")
+# print("Successfully upload service.")
 
 
 # # 6. Change cache tiles (manage-map-server-cache-tiles)
@@ -523,3 +523,139 @@ print("Successfully upload service.")
 # report.close()
 
 # print ("Completed update of cache tiles for hosted service")
+
+
+# 7. Extract the climate maps by mask (msoa layers)
+# 7.1 Read the attribute names (NAME_2)
+name2_field_name = 'NAME_2'
+authorities_list = []
+authorities_list_nospace = []
+fields = [name2_field_name]
+
+cursor = arcpy.SearchCursor('C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/GBR_adm/GBR_adm2.shp',
+fields)
+
+for row in cursor:
+    authorities_list.append(row.NAME_2)
+
+del cursor
+
+for i in authorities_list:
+    # print(i)
+    i = i.replace(" ", "_")
+    authorities_list_nospace.append(i)
+    
+print(authorities_list)
+print(authorities_list_nospace)
+
+# # 7.2 Extract by mask
+# in_lyr_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\period_layer_file\\'
+# in_mask = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\msoa_mask\\'
+# out_mask_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\msoa_mask_nospace\\'
+
+# def MASK_EXTRACT_MSOA(in_root_dir, mask, out_dir=out_mask_dir):
+#     for var_name in var_list:
+#         for period_name in periods:
+#             for season_name in ann_seasons:
+#                 for index, authority_name in enumerate(authorities_list):
+#                     target_file = in_root_dir + '{}_{}_{}.lyrx'.format(var_name,period_name,season_name)
+#                     mask_dir = mask + '{}.shp'.format(authority_name)
+#                     outExtractByMask = ExtractByMask(target_file,mask_dir)
+#                     outExtractByMask.save(out_dir + '{}_{}_{}_{}.tif'.format(var_name,period_name,season_name,authorities_list_nospace[index]))
+
+# MASK_EXTRACT_MSOA(in_lyr_dir,in_mask)
+
+# 7.3 Band Collection Statistics
+# Set environment settings
+env.workspace = "C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/msoa_mask_nospace/"
+outStat_dir = "C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/txt_stats_sep/"
+
+authorities_list_nospace.remove('Rhondda,_Cynon,_Taff')
+
+var_list = [
+            'tasmax','tasmin','uas','vas','wsgmax10m']
+
+# make different folders
+for var_name in var_list:
+    for period_name in periods:
+        for season_name in ann_seasons:
+            for authority_name in authorities_list_nospace:
+                inRasterBand1 = '{}_{}_{}_{}.tif'.format(var_name,period_name,season_name,authority_name)
+                outStatFile = outStat_dir + "{}/".format(var_name) + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name)
+                BandCollectionStats([inRasterBand1], outStatFile)
+
+# ## need to add Rhondda,_Cynon,_Taff!!! and 'sfcWind' and 'tas'
+# ori_name = 'Rhondda,_Cynon,_Taff'
+# add_name = 'Rhondda_Cynon_Taff'
+
+# for var_name in var_list:
+#     for period_name in periods:
+#         for season_name in ann_seasons:
+#             inRasterBand1 = '{}_{}_{}_{}.tif'.format(var_name,period_name,season_name,ori_name)
+#             outStatFile = outStat_dir + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,add_name)
+#             BandCollectionStats([inRasterBand1], outStatFile)
+
+
+# # 7.4 Read .txt file
+# # read .txt file
+# txt_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\txt_stats\\'
+
+# authorities_list_nospace.append('Rhondda_Cynon_Taff')
+
+# # function to extract value
+# def read_stat(stat_line):
+#     pass_one, pass_min, pass_max, pass_mean, pass_std, to_min, to_max, to_mean, to_std = False, False, False, False, False, False, False, False, False
+#     min_val, max_val, mean_val, std_val = '', '', '', ''
+
+#     for i in stat_line:
+#         if i == ' ' and pass_one == False:
+#             continue
+#         elif i == '1' and pass_one == False:
+#             pass_one = True
+#             continue
+#         elif i == ' ' and to_min == False:
+#             continue
+#         elif i != ' ' and pass_one == True and pass_min == False:
+#             to_min = True
+#             min_val += i
+#             continue
+#         elif i == ' ' and to_min == True and to_max == False:
+#             pass_min = True
+#             continue
+#         elif i != ' ' and pass_min == True and pass_max == False:
+#             to_max = True
+#             max_val += i
+#             continue
+#         elif i == ' ' and to_max == True and to_mean == False:
+#             pass_max = True
+#             continue
+#         elif i != ' ' and pass_max == True and pass_mean == False:
+#             to_mean = True
+#             mean_val += i
+#             continue
+#         elif i == ' ' and to_mean == True and to_std == False:
+#             pass_mean = True
+#             continue
+#         elif i != ' ' and i != '\n' and pass_mean == True and pass_std == False:
+#             to_std = True
+#             std_val += i 
+#             continue
+
+#     return min_val, max_val, mean_val, std_val
+
+# # connect to mongodb
+
+
+# # loop the .txt to extract value
+# for var_name in var_list:
+#     for period_name in periods:
+#         for season_name in ann_seasons:
+#             for authority_name in authorities_list_nospace:
+#                 # read file and line 7
+#                 file = open(txt_dir + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name))
+#                 stat_line = file.readlines()[6]
+#                 print(var_name,period_name,season_name,authority_name,stat_line)
+#                 file.close()
+
+#                 # read stat values
+#                 min_val, max_val, mean_val, std_val = read_stat(stat_line)
