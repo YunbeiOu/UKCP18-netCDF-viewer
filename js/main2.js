@@ -315,7 +315,7 @@ var legend_L;
 
     var div = L.DomUtil.create('div', 'legend');
 
-    grades = ['30', '24', '18', '12', '&nbsp6'];
+    grades = ['30', '22.5', '15', '7.5', '&nbsp0'];
 
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=
@@ -339,7 +339,7 @@ var legend_L;
 
 
     // Add legend on the left map
-    const mapcolorRampL = colorRamps.byName("Green 25")
+    const mapcolorRampL = colorRamps.byName("Blue and Red 10")
     const continuousColorsL = mapcolorRampL.colors;
 
     const colorRampElementL = symbolUtils.renderColorRampPreviewHTML(continuousColorsL, {
@@ -357,7 +357,7 @@ var legend_L;
 
     var div = L.DomUtil.create('div', 'legend_L');
 
-    grades = ['&nbsp&nbsp30', '47.5', '&nbsp&nbsp65', '82.5', '&nbsp100'];
+    grades = ['30', '22.5', '15', '7.5', '&nbsp0'];
 
     for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=

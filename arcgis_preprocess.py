@@ -1,10 +1,14 @@
 # import libraries
+import pandas as pd
+import numpy as np
 import arcpy
 from arcpy import env
 from arcpy.sa import *
 import datetime
 import os, sys
 import time
+import pymongo
+from pymongo import MongoClient
 
 
 # input file
@@ -23,6 +27,10 @@ arcpy.env.overwriteOutput = True
 var_list = ['clt','flashrate','hurs','huss','pr','prsn',
             'psl','rls','rss','sfcWind','snw','tas',
             'tasmax','tasmin','uas','vas','wsgmax10m']
+
+var_list_short = ['clt','flash','hurs','huss','pr','prsn',
+            'psl','rls','rss','sfcWind','snw','tas',
+            'tasmax','tasmin','uas','vas','wsgmax']
 
 time_list_1yr = list(range(1980,2000,1))+list(range(2020,2040,1))+list(range(2060,2080,1))
 
@@ -525,7 +533,7 @@ ann_seasons = ['annual','winter','spring','summer','autumn']
 # print ("Completed update of cache tiles for hosted service")
 
 
-# 7. Extract the climate maps by mask (msoa layers)
+# 7. Data querying - get values for each msoa 
 # 7.1 Read the attribute names (NAME_2)
 name2_field_name = 'NAME_2'
 authorities_list = []
@@ -543,6 +551,7 @@ del cursor
 for i in authorities_list:
     # print(i)
     i = i.replace(" ", "_")
+    i = i.replace(",", "_")
     authorities_list_nospace.append(i)
     
 print(authorities_list)
@@ -565,97 +574,170 @@ print(authorities_list_nospace)
 
 # MASK_EXTRACT_MSOA(in_lyr_dir,in_mask)
 
-# 7.3 Band Collection Statistics
-# Set environment settings
-env.workspace = "C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/msoa_mask_nospace/"
-outStat_dir = "C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/txt_stats_sep/"
+# # 7.3 Band Collection Statistics
+# # Set environment settings
+# env.workspace = "C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/msoa_mask_nospace/"
+# outStat_dir = "C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/txt_stats_sep/"
 
-authorities_list_nospace.remove('Rhondda,_Cynon,_Taff')
-
-var_list = [
-            'tasmax','tasmin','uas','vas','wsgmax10m']
-
-# make different folders
-for var_name in var_list:
-    for period_name in periods:
-        for season_name in ann_seasons:
-            for authority_name in authorities_list_nospace:
-                inRasterBand1 = '{}_{}_{}_{}.tif'.format(var_name,period_name,season_name,authority_name)
-                outStatFile = outStat_dir + "{}/".format(var_name) + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name)
-                BandCollectionStats([inRasterBand1], outStatFile)
-
-# ## need to add Rhondda,_Cynon,_Taff!!! and 'sfcWind' and 'tas'
-# ori_name = 'Rhondda,_Cynon,_Taff'
-# add_name = 'Rhondda_Cynon_Taff'
-
-# for var_name in var_list:
-#     for period_name in periods:
-#         for season_name in ann_seasons:
-#             inRasterBand1 = '{}_{}_{}_{}.tif'.format(var_name,period_name,season_name,ori_name)
-#             outStatFile = outStat_dir + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,add_name)
-#             BandCollectionStats([inRasterBand1], outStatFile)
-
-
-# # 7.4 Read .txt file
-# # read .txt file
-# txt_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\txt_stats\\'
-
-# authorities_list_nospace.append('Rhondda_Cynon_Taff')
-
-# # function to extract value
-# def read_stat(stat_line):
-#     pass_one, pass_min, pass_max, pass_mean, pass_std, to_min, to_max, to_mean, to_std = False, False, False, False, False, False, False, False, False
-#     min_val, max_val, mean_val, std_val = '', '', '', ''
-
-#     for i in stat_line:
-#         if i == ' ' and pass_one == False:
-#             continue
-#         elif i == '1' and pass_one == False:
-#             pass_one = True
-#             continue
-#         elif i == ' ' and to_min == False:
-#             continue
-#         elif i != ' ' and pass_one == True and pass_min == False:
-#             to_min = True
-#             min_val += i
-#             continue
-#         elif i == ' ' and to_min == True and to_max == False:
-#             pass_min = True
-#             continue
-#         elif i != ' ' and pass_min == True and pass_max == False:
-#             to_max = True
-#             max_val += i
-#             continue
-#         elif i == ' ' and to_max == True and to_mean == False:
-#             pass_max = True
-#             continue
-#         elif i != ' ' and pass_max == True and pass_mean == False:
-#             to_mean = True
-#             mean_val += i
-#             continue
-#         elif i == ' ' and to_mean == True and to_std == False:
-#             pass_mean = True
-#             continue
-#         elif i != ' ' and i != '\n' and pass_mean == True and pass_std == False:
-#             to_std = True
-#             std_val += i 
-#             continue
-
-#     return min_val, max_val, mean_val, std_val
-
-# # connect to mongodb
-
-
-# # loop the .txt to extract value
+# # save result to different folders
 # for var_name in var_list:
 #     for period_name in periods:
 #         for season_name in ann_seasons:
 #             for authority_name in authorities_list_nospace:
+#                 inRasterBand1 = '{}_{}_{}_{}.tif'.format(var_name,period_name,season_name,authority_name)
+#                 outStatFile = outStat_dir + "{}/".format(var_name) + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name)
+#                 BandCollectionStats([inRasterBand1], outStatFile)
+
+
+# # 8. Read .txt and import data to database
+# # 8.1 make a connection with MongoClient
+# client = MongoClient('localhost', 27017)
+
+# # get database
+# db_name = 'UKCP18_test'
+# db = client[db_name]
+
+# # 8.2 Read .txt file
+# # read .txt file
+# txt_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\txt_stats_sep\\'
+
+# 8.3 function to extract value
+def read_stat(stat_line):
+    pass_one, pass_min, pass_max, pass_mean, pass_std, to_min, to_max, to_mean, to_std = False, False, False, False, False, False, False, False, False
+    min_val, max_val, mean_val, std_val = '', '', '', ''
+
+    for i in stat_line:
+        if i == ' ' and pass_one == False:
+            continue
+        elif i == '1' and pass_one == False:
+            pass_one = True
+            continue
+        elif i == ' ' and to_min == False:
+            continue
+        elif i != ' ' and pass_one == True and pass_min == False:
+            to_min = True
+            min_val += i
+            continue
+        elif i == ' ' and to_min == True and to_max == False:
+            pass_min = True
+            continue
+        elif i != ' ' and pass_min == True and pass_max == False:
+            to_max = True
+            max_val += i
+            continue
+        elif i == ' ' and to_max == True and to_mean == False:
+            pass_max = True
+            continue
+        elif i != ' ' and pass_max == True and pass_mean == False:
+            to_mean = True
+            mean_val += i
+            continue
+        elif i == ' ' and to_mean == True and to_std == False:
+            pass_mean = True
+            continue
+        elif i != ' ' and i != '\n' and pass_mean == True and pass_std == False:
+            to_std = True
+            std_val += i 
+            continue
+
+    return min_val, max_val, mean_val, std_val
+
+# # 8.4 loop the .txt to extract value and insert document to mongodb
+# for var_name in var_list:
+#     # get collection
+#     collection = db[var_name]
+#     for period_name in periods:
+#         for season_name in ann_seasons:
+#             for index, authority_name in enumerate(authorities_list_nospace):
 #                 # read file and line 7
-#                 file = open(txt_dir + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name))
+#                 file = open(txt_dir + "{}\\".format(var_name) + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name))
 #                 stat_line = file.readlines()[6]
 #                 print(var_name,period_name,season_name,authority_name,stat_line)
 #                 file.close()
 
 #                 # read stat values
 #                 min_val, max_val, mean_val, std_val = read_stat(stat_line)
+
+#                 # insert a document
+#                 collection.insert_one(
+#                     {
+#                         "_id":"{}_{}_{}_{}".format(var_name,period_name,season_name,authority_name),
+#                         "period":period_name,
+#                         "season":season_name,
+#                         "authority": authorities_list[index],
+#                         "authority_nospace":authority_name,
+#                         "min_val":min_val,
+#                         "max_val":max_val,
+#                         "mean_val":mean_val,
+#                         "std_val":std_val
+#                     }
+#                 )
+
+#                 print("Finished:{}_{}_{}_{}".format(var_name,period_name,season_name,authority_name))
+
+
+# 9. Add msoa values to arcgis attribute table
+# read .txt file
+txt_dir = 'C:\\Users\\jobbo\\Documents\\ArcGIS\\Projects\\MyProject_MSc_Diss\\txt_stats_sep\\'
+
+# # 9.1 Add fields in attribute table
+# arcpy.env.workspace = 'C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/GBR_adm/GBR_adm2.shp'
+# for var_name in var_list_short:
+#     for i in list(range(3)):
+#         for j in list(range(4)):
+#             field_name = '{}{}{}'.format(var_name,str(i),str(j))
+#             arcpy.AddField_management('GBR_adm2',field_name,'FLOAT')
+
+# 9.2 loop the .txt to extract value and put in dataframe
+COLUMN_NAMES = ['authority','var','period','season','value']
+
+df = pd.DataFrame(columns=COLUMN_NAMES)
+
+for var_name in var_list:
+    for period_name in periods:
+        for season_name in seasons:
+            for index, authority_name in enumerate(authorities_list_nospace):
+                # read file and line 7
+                file = open(txt_dir + "{}\\".format(var_name) + "{}_{}_{}_{}.txt".format(var_name,period_name,season_name,authority_name))
+                stat_line = file.readlines()[6]
+                print(var_name,period_name,season_name,authority_name,stat_line)
+                file.close()
+
+                # read stat values
+                min_val, max_val, mean_val, std_val = read_stat(stat_line)
+
+                df = df.append({'authority': authority_name,'var':var_name,'period':period_name,'season':season_name,'value':mean_val}, ignore_index=True)
+
+df = pd.pivot(df, index=['authority'],columns=['var','period','season'],values='value')
+print(df)
+
+# 9.3 Insert into attribute table in ArcGIS
+# Open an UpdateICursor
+fields = []
+for var_name in var_list_short:
+    for i in list(range(3)):
+        for j in list(range(4)):
+            fields.append('{}{}{}'.format(var_name,str(i),str(j)))
+
+cursor = arcpy.UpdateCursor('C:/Users/jobbo/Documents/ArcGIS/Projects/MyProject_MSc_Diss/GBR_adm/GBR_adm2.shp',fields)
+print('cursor set')
+
+# Insert new values
+row_num = 0
+for row in cursor:
+    authority_name = row.NAME_2
+    authority_name = authority_name.replace(" ", "_")
+    authority_name = authority_name.replace(",", "_")
+
+    for index_v, var_name in enumerate(var_list):
+        for index_p, period_name in enumerate(periods):
+            for index_s, season_name in enumerate(seasons):
+                set_val = df.loc['{}'.format(authority_name),'{}'.format(var_name)][period_name][season_name]
+                row.setValue('{}{}{}'.format(var_list_short[index_v],str(index_p),str(index_s)), set_val)
+                row_num += 1
+                cursor.updateRow(row)
+                print('set in attribute table: {}'.format('{}{}{}'.format(var_list_short[index_v],str(index_p),str(index_s))))
+
+del cursor
+print('all value inserted')
+

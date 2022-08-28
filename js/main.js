@@ -16,29 +16,13 @@ require([
   "esri/widgets/Locate",
   "esri/widgets/LayerList",
   "esri/smartMapping/symbology/support/colorRamps",
-  "esri/symbols/support/symbolUtils"
-], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate,LayerList,colorRamps,symbolUtils) {
-
-   const labelClass = {
-          // autocasts as new LabelClass()
-          symbol: {
-            type: "text", // autocasts as new TextSymbol()
-            color: "white",
-            font: {
-              // autocast as new Font()
-              family: "Playfair Display",
-              size: 10,
-              weight: "bold"
-            }
-          },
-          labelPlacement: "above-center",
-          labelExpressionInfo: {
-            expression: "$feature.NAME_1"
-          }
-        };
+  "esri/symbols/support/symbolUtils",
+  "esri/PopupTemplate",
+  "esri/popup/content/CustomContent",
+  "esri/rest/support/Query",
+  "esri/rest/query"
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate,LayerList,colorRamps,symbolUtils,PopupTemplate,CustomContent,Query,query) {
   
-    // https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/wsgmax10m_future_autumn/MapServer
-
     let url_head = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/';
 
     let url_end = '/MapServer';
@@ -66,6 +50,7 @@ require([
     };
   
     function show_lyr() {
+      view.popup.visible = false;
       var radios = document.getElementsByName('var');
       var var_value;
       for (var i = 0, length = radios.length; i < length; i++) {
@@ -139,7 +124,6 @@ require([
       }), "bottom-right");
 
     }
-
   
     var vtlLayer = new TileLayer({
     url: "https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/clt_history_annual/MapServer",
@@ -162,7 +146,8 @@ require([
 
     var boundary_lyr_mosa = new FeatureLayer({
       // URL to the vector tile service
-      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_black/FeatureServer",
+      // url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_black/FeatureServer",
+      url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_popup/FeatureServer",
       title: "Authority boundaries"
     });
 
@@ -171,8 +156,6 @@ require([
       url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/socio_eco_uk/FeatureServer",
       title: "Economic activity"
     });
-
-
 
     var fealayer3 = new FeatureLayer({
       // URL to the vector tile service
@@ -185,48 +168,17 @@ require([
       url: "https://uomanchester.maps.arcgis.com/sharing/rest/content/items/796bcd7e487b416ba3420d1ffc8649d7/resources/styles/root.json",
       title: 'Label'
     });
+    
 
-
-    // Add pop-up for boundary_lyr_mosa
-    // Create pop-up template object
-    const template = {
-      // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
-      title: "{NAME_2}, {NAME_1}",
-    };
-
-    boundary_lyr_mosa.popupTemplate = template;
-
-    // // Add content to the PopupTemplate
-
+    // // Create pop-up template object
     // const template = {
-    //   // autocasts as new PopupTemplate()
+    //   // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
     //   title: "{NAME_2}, {NAME_1}",
-    //   content: [
-    //     {
-    //       type: "fields",
-    //       fieldInfos: [
-    //         {
-    //           fieldName: "B12001_calc_pctMarriedE",
-    //           label: "Married %"
-    //         },
-    //         {
-    //           fieldName: "B12001_calc_numMarriedE",
-    //           label: "People Married"
-    //         },
-    //         {
-    //           fieldName: "B12001_calc_numNeverE",
-    //           label: "People that Never Married"
-    //         },
-    //         {
-    //           fieldName: "B12001_calc_numDivorcedE",
-    //           label: "People Divorced"
-    //         }
-    //       ]
-    //     }
-    //   ]
     // };
 
-  
+    // boundary_lyr_mosa.popupTemplate = template;
+
+
     var map = new Map({
       basemap: {
         portalItem: {
@@ -277,11 +229,6 @@ require([
     // Add widget to the bottom right corner of the view
     view.ui.add(legend, "bottom-right");
 
-      
-
-
-
-
     // Add home button
     const homeBtn = new Home({
       view: view
@@ -312,7 +259,6 @@ require([
     view.ui.add(layerListExpand, "top-left");
 
 
-
     // Add button behaviors
     var radios = document.getElementsByName('var');
     for (var i = 0, length = radios.length; i < length; i++) {
@@ -332,7 +278,123 @@ require([
       document.getElementById(id_name).addEventListener("click",show_lyr);
     }
 
+
+    // This custom content contains a widget
+    let customContentWidget = new CustomContent({
+      outFields: ["*"],
+      creator: function(event) {
+        var radios = document.getElementsByName('var');
+        var var_name;
+        var legend_name;
+        for (var i = 0, length = radios.length; i < length; i++) {
+          if (radios[i].checked) {
+            // do whatever you want with the checked radio
+            var_name = radios[i].value;
+            legend_name = legend_dict[var_name]
+            if (var_name === 'flashrate') {var_name = 'flash'}
+            if (var_name === 'wsgmax10m') {var_name = 'wsgmax'}
+            // only one radio can be logically checked, don't check the rest
+            break;
+          }
+        }
+
+        radios = document.getElementsByName('per');
+        var per_name;
+        for (var i = 0, length = radios.length; i < length; i++) {
+          if (radios[i].checked) {
+            // do whatever you want with the checked radio
+            per_name = i;
+            
+            // only one radio can be logically checked, don't check the rest
+            break;
+          }
+        }
+
+        radios = document.getElementsByName('sea');
+        var sea_name;
+        for (var i = 0, length = radios.length; i < length; i++) {
+          if (radios[i].checked) {
+            // do whatever you want with the checked radio
+            sea_name = i;
+            
+            // only one radio can be logically checked, don't check the rest
+            break;
+          }
+        }
+
+        // refer to name in attribute table; per_name: history&current&future
+        // if sea_name == 0!!!
+        selected_name = var_name + per_name + sea_name;
+        
+
+        // Query URL for authority boungaries
+        // const queryUrl = "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_black/FeatureServer/0";
+
+        // query the selected field name to get value and return
+        if (sea_name != 0) {
+          let popup_val = event.graphic.attributes[selected_name].toFixed(2);
+          return `${legend_name} : <b>${popup_val}</b> (mean) <br/><br/>`;
+        }  
+        
+        if (sea_name === 0){
+          let win_val = event.graphic.attributes[ var_name + per_name + '0'];
+          let spr_val = event.graphic.attributes[ var_name + per_name + '1'];
+          let sum_val = event.graphic.attributes[ var_name + per_name + '2'];
+          let aut_val = event.graphic.attributes[ var_name + per_name + '3'];
+          let popup_val = (win_val+spr_val+sum_val+aut_val)/4;
+          popup_val = popup_val.toFixed(2);
+          return `${legend_name} : <b>${popup_val}</b> (mean) <br/><br/>`;
+        }
+      }
+    });
+
+     // This custom content element contains the Search widget
+     const contentWidget = new CustomContent({
+      outFields: ["*"],
+      creator: () => {
+        return searchWidget;
+      }
+    });
+
+    // Create search widget in popup
+    // Create the Search widget
+    let searchWidget = new Search({
+      view: view,
+      includeDefaultSources: false,
+      locationEnabled: false,
+      popupEnabled: true,
+      searchAllEnabled: false,
+      suggestionsEnabled: true,
+      sources: [
+        {
+          layer: boundary_lyr_mosa,
+          searchFields: ["NAME_2"],
+          displayField: "NAME_2",
+          exactMatch: false,
+          outFields: ["*"],
+          name: "NAME_2",
+          placeholder: "Search by local authority"
+        }
+      ]
+    });
+
+    // Create the PopupTemplate and reference the two custom content elements
+    const template = new PopupTemplate({
+      outFields: ["*"],
+      title: "{NAME_2}, {NAME_1}",
+      content: [contentWidget,customContentWidget]
+    });
+
+    boundary_lyr_mosa.popupTemplate = template;
+
+    view.popup.autoCloseEnabled = true;
+
+
+
   
 });
+
+
+
 
 
