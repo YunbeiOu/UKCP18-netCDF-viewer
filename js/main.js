@@ -388,9 +388,6 @@ require([
     boundary_lyr_mosa.popupTemplate = template;
 
     view.popup.autoCloseEnabled = true;
-
-
-
   
 });
 
