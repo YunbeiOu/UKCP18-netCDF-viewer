@@ -88,7 +88,13 @@ require([
         }
       }
 
-      layer_name = var_value + '_' + per_value + '_' + sea_value
+      
+
+      let layer_name = var_value + '_' + per_value + '_' + sea_value;
+
+      if (layer_name === 'tasmax_history_spring' || layer_name === 'tasmax_history_summer' || layer_name === 'tasmax_history_autumn') {
+        layer_name = layer_name + '_new';
+      }
 
       lyr_url = (url_head.concat(layer_name)).concat(url_end);
   
