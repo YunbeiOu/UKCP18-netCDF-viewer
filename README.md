@@ -1,1 +1,2 @@
-# climate_web_map
+Web-based Climate Change Planning Support System
+
