@@ -3,25 +3,17 @@ require([
   "esri/layers/TileLayer",
   "esri/layers/FeatureLayer",
   "esri/layers/VectorTileLayer",
-  "esri/layers/WMSLayer",
   "esri/geometry/Point",
   "esri/views/MapView",
-   "esri/Basemap",
   "esri/widgets/Search",
   "esri/widgets/Expand",
   "esri/widgets/Legend",
-  "esri/widgets/Swipe",
-  "esri/widgets/TimeSlider",
   "esri/widgets/Home",
   "esri/widgets/Locate",
   "esri/widgets/LayerList",
-  "esri/smartMapping/symbology/support/colorRamps",
-  "esri/symbols/support/symbolUtils",
   "esri/PopupTemplate",
   "esri/popup/content/CustomContent",
-  "esri/rest/support/Query",
-  "esri/rest/query"
-], function(Map, TileLayer,FeatureLayer,VectorTileLayer,WMSLayer,Point, MapView,Basemap,Search,Expand,Legend,Swipe,TimeSlider,Home,Locate,LayerList,colorRamps,symbolUtils,PopupTemplate,CustomContent,Query,query) {
+], function(Map, TileLayer,FeatureLayer,VectorTileLayer,Point, MapView,Search,Expand,Legend,Home,Locate,LayerList,PopupTemplate,CustomContent) {
   
     let url_head = 'https://tiles.arcgis.com/tiles/SfF67lOzKAmtSACX/arcgis/rest/services/';
 
@@ -55,11 +47,8 @@ require([
       var var_value;
       for (var i = 0, length = radios.length; i < length; i++) {
         if (radios[i].checked) {
-          // do whatever you want with the checked radio
           var_value = radios[i].value;
           console.log(var_value)
-          
-          // only one radio can be logically checked, don't check the rest
           break;
         }
       }
@@ -68,10 +57,7 @@ require([
       var per_value;
       for (var i = 0, length = radios.length; i < length; i++) {
         if (radios[i].checked) {
-          // do whatever you want with the checked radio
           per_value = radios[i].value;
-          
-          // only one radio can be logically checked, don't check the rest
           break;
         }
       }
@@ -80,15 +66,10 @@ require([
       var sea_value;
       for (var i = 0, length = radios.length; i < length; i++) {
         if (radios[i].checked) {
-          // do whatever you want with the checked radio
           sea_value = radios[i].value;
-          
-          // only one radio can be logically checked, don't check the rest
           break;
         }
       }
-
-      
 
       let layer_name = var_value + '_' + per_value + '_' + sea_value;
 
@@ -104,21 +85,15 @@ require([
       title: legend_dict[var_value]
       });
 
-
-      // view.ui.empty("manual");
       map.removeAll();
       
-
       map.layers.add(vtlLayer);
       map.layers.add(boundary_lyr);
       map.layers.add(boundary_lyr_mosa);
       map.layers.add(vtlLayer_GB);
 
-
-      // view.ui.remove(legend);
       view.ui.empty("bottom-right");
 
-      
       view.ui.add(new Legend({
         view: view,
         layerInfos: [
@@ -142,48 +117,30 @@ require([
     spatialReference: 27700
     });
   
-    // Create featurelayer from feature service
     const boundary_lyr = new FeatureLayer({
-      // URL to the service
       url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm1/FeatureServer",
       title: "GB boundary"
-      // labelingInfo: [labelClass],
     });
 
     var boundary_lyr_mosa = new FeatureLayer({
-      // URL to the vector tile service
-      // url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_black/FeatureServer",
       url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_popup/FeatureServer",
       title: "Authority boundaries"
     });
 
     var fealayer = new FeatureLayer({
-      // URL to the vector tile service
       url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/socio_eco_uk/FeatureServer",
       title: "Economic activity"
     });
 
     var fealayer3 = new FeatureLayer({
-      // URL to the vector tile service
       url: "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/all_residents/FeatureServer",
       title: 'Number of residents'
     });
 
     var vtlLayer_GB = new VectorTileLayer({
-      // URL to the vector tile service
       url: "https://uomanchester.maps.arcgis.com/sharing/rest/content/items/796bcd7e487b416ba3420d1ffc8649d7/resources/styles/root.json",
       title: 'Label'
     });
-    
-
-    // // Create pop-up template object
-    // const template = {
-    //   // NAME and COUNTY are fields in the service containing the Census Tract (NAME) and county of the feature
-    //   title: "{NAME_2}, {NAME_1}",
-    // };
-
-    // boundary_lyr_mosa.popupTemplate = template;
-
 
     var map = new Map({
       basemap: {
@@ -207,15 +164,6 @@ require([
       minZoom: 4,
       maxZoom: 9
       };
-    
-    // Set the extent on the view
-    // view.extent = new Extent({
-    //   xmin: 350000,
-    //   ymin: 500000,
-    //   xmax: 350000,
-    //   ymax: 500000,
-    //   spatialReference:  27700
-    // });
 
     view.ui.add("titleDiv", "top-right");
 
@@ -257,8 +205,7 @@ require([
       view: view
     });
     layerListExpand = new Expand({
-      expandIconClass: "esri-icon-layer-list",  // see https://developers.arcgis.com/javascript/latest/guide/esri-icon-font/
-      // expandTooltip: "Expand LayerList", // optional, defaults to "Expand" for English locale
+      expandIconClass: "esri-icon-layer-list", 
       view: view,
       content: layerList
     });
@@ -294,12 +241,10 @@ require([
         var legend_name;
         for (var i = 0, length = radios.length; i < length; i++) {
           if (radios[i].checked) {
-            // do whatever you want with the checked radio
             var_name = radios[i].value;
             legend_name = legend_dict[var_name]
             if (var_name === 'flashrate') {var_name = 'flash'}
             if (var_name === 'wsgmax10m') {var_name = 'wsgmax'}
-            // only one radio can be logically checked, don't check the rest
             break;
           }
         }
@@ -308,10 +253,7 @@ require([
         var per_name;
         for (var i = 0, length = radios.length; i < length; i++) {
           if (radios[i].checked) {
-            // do whatever you want with the checked radio
             per_name = i;
-            
-            // only one radio can be logically checked, don't check the rest
             break;
           }
         }
@@ -320,21 +262,12 @@ require([
         var sea_name;
         for (var i = 0, length = radios.length; i < length; i++) {
           if (radios[i].checked) {
-            // do whatever you want with the checked radio
             sea_name = i;
-            
-            // only one radio can be logically checked, don't check the rest
             break;
           }
         }
 
-        // refer to name in attribute table; per_name: history&current&future
-        // if sea_name == 0!!!
         selected_name = var_name + per_name + sea_name;
-        
-
-        // Query URL for authority boungaries
-        // const queryUrl = "https://services1.arcgis.com/SfF67lOzKAmtSACX/arcgis/rest/services/GBR_adm2_black/FeatureServer/0";
 
         // query the selected field name to get value and return
         if (sea_name != 0) {
