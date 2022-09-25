@@ -2,145 +2,39 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Non-mercator projection</title>
+  <title>About page</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 
-  <!-- Load Leaflet from CDN -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin=""/>
   <link rel="stylesheet" href="css/style2.css">
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""></script>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/css/main.css">
+  <script src="js/main2.js"></script>
 
-  <!-- Load Esri Leaflet from CDN -->
-  <script src="https://unpkg.com/esri-leaflet@3.0.8/dist/esri-leaflet.js"
-    integrity="sha512-E0DKVahIg0p1UHR2Kf9NX7x7TUewJb30mxkxEm2qOYTVJObgsAGpEol9F6iK6oefCbkJiA4/i6fnTHzM6H1kEA=="
-    crossorigin=""></script>
-  
-  <script src="leaflet-providers-master/leaflet-providers.js"></script>
-  <script src="lib/leaflet-side-by-side.min.js"></script>
-  <script src="https://unpkg.com/esri-leaflet-vector@3.1.3/dist/esri-leaflet-vector.js" crossorigin=""></script>
-  
 </head>
 
 <body>
+  <!-- <h1>About the project</h1> -->
+  <br>
+  <h2>About project</h2>
 
-<!-- Proj4 and Proj4Leaflet -->
-<script src="https://unpkg.com/proj4@2.4.3"></script>
-<script src="https://unpkg.com/proj4leaflet@1.0.1"></script>
-<script src="https://js.arcgis.com/4.24/"></script>
-<!-- Load shapeMarkers from CDN -->
-<!-- <script src="https://unpkg.com/leaflet-shape-markers@1.0.6"></script> -->
-
-<div id="map">
-  <!-- <div id="legend_L">
-    <div id="ramp_div_L"></div>
-    <div id="text_div_L"></div>
-  </div>
-  <div id="legend">
-    <div id="ramp_div"></div>
-    <div id="text_div"></div>
-  </div> -->
-</div>
-
-
-
-<div id="panel">
-
-  <p>Select weather variable :</p>
-  <div class="select_var" tabindex="1" id="var_select">
-    <input class="selectopt_var" name="var" type="radio" id="var_opt1" value="clt" checked>
-    <label for="var_opt1" class="option_var">Cloud cover</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt2" value="flashrate">
-    <label for="var_opt2" class="option_var">Lightning</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt3" value="hurs">
-    <label for="var_opt3" class="option_var">Relative humidity</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt4" value="huss">
-    <label for="var_opt4" class="option_var">Specific humidity</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt5" value="pr">
-    <label for="var_opt5" class="option_var">Precipitation</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt6" value="prsn">
-    <label for="var_opt6" class="option_var">Snowfall</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt7" value="psl">
-    <label for="var_opt7" class="option_var">Sea level pressure</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt8" value="rls">
-    <label for="var_opt8" class="option_var">Radiation (Net long wave)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt9" value="rss">
-    <label for="var_opt9" class="option_var">Radiation (Net short wave)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt10" value="sfcWind">
-    <label for="var_opt10" class="option_var">Wind speed</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt11" value="snw">
-    <label for="var_opt11" class="option_var">Lying snow</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt12" value="tas">
-    <label for="var_opt12" class="option_var">Temperature (Mean)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt13" value="tasmax">
-    <label for="var_opt13" class="option_var">Temerature (Maximum)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt14" value="tasmin">
-    <label for="var_opt14" class="option_var">Temperature (Minimum)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt15" value="uas">
-    <label for="var_opt15" class="option_var">Wind speed (Eastwards)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt16" value="vas">
-    <label for="var_opt16" class="option_var">Wind speed (Northwards)</label>
-
-    <input class="selectopt_var" name="var" type="radio" id="var_opt17" value="wsgmax10m">
-    <label for="var_opt17" class="option_var">Wind gusts</label>
-  </div>
-
-  <p>Select climate period :</p>
-  <div class="select" tabindex="1" id="per_select">
-    <input class="selectopt" name="per" type="radio" id="per_opt1" value="history" checked>
-    <label for="per_opt1" class="option">1980-1999</label>
-    <input class="selectopt" name="per" type="radio" id="per_opt2" value="current">
-    <label for="per_opt2" class="option">2020-2039</label>
-    <input class="selectopt" name="per" type="radio" id="per_opt3" value="future">
-    <label for="per_opt3" class="option">2060-2079</label>
-  </div>
-  
-  <p>Select season :</p>
-  <div class="select" tabindex="1" id="sea_select">
-    <input class="selectopt" name="sea" type="radio" id="sea_opt1" value="annual" checked>
-    <label for="sea_opt1" class="option">Annual</label>
-    <input class="selectopt" name="sea" type="radio" id="sea_opt2" value="winter">
-    <label for="sea_opt2" class="option">Winter</label>
-    <input class="selectopt" name="sea" type="radio" id="sea_opt3" value="spring">
-    <label for="sea_opt3" class="option">Spring</label>
-    <input class="selectopt" name="sea" type="radio" id="sea_opt4" value="summer">
-    <label for="sea_opt4" class="option">Summer</label>
-    <input class="selectopt" name="sea" type="radio" id="sea_opt5" value="autumn">
-    <label for="sea_opt5" class="option">Autumn</label>
-  </div>
-
-  <p>Select display panel :</p>
-  <div class="swipe" tabindex="1" id="pan_select">
-    <input class="selectopt_sw" name="pan" type="radio" id="pan_opt1" value="left" checked>
-    <label for="pan_opt1" class="option_btn">Left panel</label>
-    <input class="selectopt_sw" name="pan" type="radio" id="pan_opt2" value="right">
-    <label for="pan_opt2" class="option_btn">Right panel</label>
-  </div>
-
-
- 
-</div>
-
-<script src="js/main2.js"></script>
+  <p>
+     This website was developed by Yunbei Ou in the Master's dissertation projection,  
+    under the supervision of <a href = "https://www.research.manchester.ac.uk/portal/en/researchers/richard-kingston(323d6b28-83af-48a6-92f7-bb9a38ca4e19).html">Professor Richard Kingston</a>
+     from University of Manchester. 
+  </p>
+  <p>
+    This is the link to all codes: <a href = "https://github.com/joou1232">https://github.com/joou1232</a>, reproducible for similar work on visualizing NetCDF data (e.g. UKCP18) in web map. 
+  </p>
+  <br>
+  <h2>About data</h2>
+  <p>
+  The climate projections 
+  data are downloaded from <a href = "https://data.ceda.ac.uk/badc/ukcp18">
+    UKCP18</a> dataset provided by The CEDA Archive. And <a href = "https://data.ceda.ac.uk/badc/ukcp18/data/land-rcm/uk/12km/rcp85/01">
+      'UKCP18 Local Projection 01'</a> was used to demonstrate. 
+  </p>
+  <br>
+  <p>
+    If you have any questions or comments, it is welcome to email <a href = "mailto: 2702471O@student.gla.ac.uk">2702471O@student.gla.ac.uk</a> (Yunbei).
+  </p>
 
 </body>
 
