@@ -2,7 +2,7 @@
 Web address: [https://yunbeiou.github.io/UKCP18-netCDF-viewer/]
 
 ## Project detail
-This project visualize climate projections in the UK in a web map, covering 100 years of climate projections from 1980-2080. There are 17 climate variables available, including temperature, humidity, precipitation, cloud cover, snowfall, etc.
+This project visualize climate projections in the UK in a web map, covering 100 years of climate projections from 1980-2080 and allows for spatial querying in the local authority level. There are 17 climate variables available, including temperature, humidity, precipitation, cloud cover, snowfall, etc.
 
 ## Data
 The data is downloaded from [CEDA archive: UKCP Local Projections at 2.2 km Resolution for 1980-2080](https://catalogue.ceda.ac.uk/uuid/d5822183143c4011a2bb304ee7c0baf7).
